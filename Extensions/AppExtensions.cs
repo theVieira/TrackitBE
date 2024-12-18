@@ -1,3 +1,5 @@
+namespace Trackit.Extensions;
+
 public static class AppExtensions
 {
   public static void AddAPPExtensions(this WebApplication app)
