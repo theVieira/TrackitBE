@@ -12,6 +12,8 @@ public static class AppExtensions
 
     app.UseHttpsRedirection();
 
+    app.MapControllers();
+
     app.Run();
   }
 }
