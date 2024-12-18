@@ -1,3 +1,5 @@
+using Trackit.Extensions;
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.AddBuilderExtensions();
