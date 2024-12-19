@@ -13,6 +13,7 @@ public static class BuilderExtensions
     builder.Services.AddDbContext<ApplicationContext>();
     builder.Services.AddTicketServices();
     builder.Services.AddClientServices();
+    builder.Services.AddTechServices();
 
     builder.Services.AddControllers()
     .AddJsonOptions(options =>
