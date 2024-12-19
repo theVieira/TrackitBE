@@ -10,6 +10,10 @@ public static class BuilderExtensions
   {
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddSwaggerGen();
+    builder.Services.AddDbContext<ApplicationContext>();
+    builder.Services.AddTicketServices();
+    builder.Services.AddClientServices();
+
     builder.Services.AddControllers()
     .AddJsonOptions(options =>
     {
@@ -18,7 +22,5 @@ public static class BuilderExtensions
         .Converters
         .Add(new JsonStringEnumConverter());
     });
-
-    builder.Services.AddTicketServices();
   }
 }
