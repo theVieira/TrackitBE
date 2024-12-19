@@ -1,0 +1,12 @@
+services:
+  trackit-database:
+    image: postgres
+    container_name: trackit-database
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=root
+    volumes:
+      - ./docker/database:/var/lib/postgresql/data:Z # :Z to podman
+
