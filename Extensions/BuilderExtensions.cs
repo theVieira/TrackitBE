@@ -1,4 +1,6 @@
 using System.Text.Json.Serialization;
+using Trackit.Infra.Data;
+using Trackit.Services;
 
 namespace Trackit.Extensions;
 
@@ -16,5 +18,7 @@ public static class BuilderExtensions
         .Converters
         .Add(new JsonStringEnumConverter());
     });
+
+    builder.Services.AddTicketServices();
   }
 }
