@@ -1,17 +1,27 @@
 using Trackit.Core.Entities;
 using Trackit.Core.Gateways;
+using Trackit.Infra.Data;
 
 namespace Trackit.Infra.Persistence;
 
-public class ClientRepository : IClientGateway
+public class ClientRepository(ApplicationContext context) : IClientGateway
 {
-    public Task CreateAsync(Client client)
+    private readonly ApplicationContext _context = context;
+    public async Task CreateAsync(Client client)
     {
-        throw new NotImplementedException();
+        await _context.Clients.AddAsync(client);
+        await _context.SaveChangesAsync();
+        return;
     }
 
-    public Task<Client?> FindByIdAsync(string id)
+    public async Task<Client?> FindByIdAsync(string id)
     {
-        throw new NotImplementedException();
+        if(Guid.TryParse(id, out Guid Id))
+        {
+            var client = await _context.Clients.FindAsync(Id);
+            return client;
+        }
+
+        return null;
     }
 }

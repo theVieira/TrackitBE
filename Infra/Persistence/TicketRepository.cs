@@ -1,12 +1,17 @@
 using Trackit.Core.Entities;
 using Trackit.Core.Gateways;
+using Trackit.Infra.Data;
 
 namespace Trackit.Infra.Persistence;
 
-public class TicketRepository : ITicketGateway
+public class TicketRepository(ApplicationContext context) : ITicketGateway
 {
-    public Task CreateAsync(Ticket ticket)
+    private readonly ApplicationContext _context = context;
+
+    public async Task CreateAsync(Ticket ticket)
     {
-        throw new NotImplementedException();
+        await _context.Tickets.AddAsync(ticket);
+        await _context.SaveChangesAsync();
+        return;
     }
 }

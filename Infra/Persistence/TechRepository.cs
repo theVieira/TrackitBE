@@ -1,17 +1,28 @@
 using Trackit.Core.Entities;
 using Trackit.Core.Gateways;
+using Trackit.Infra.Data;
 
 namespace Trackit.Infra.Persistence;
 
-public class TechRepository : ITechGateway
+public class TechRepository(ApplicationContext context) : ITechGateway
 {
-    public Task CreateAsync(Tech tech)
+    private readonly ApplicationContext _context = context;
+
+    public async Task CreateAsync(Tech tech)
     {
-        throw new NotImplementedException();
+        await _context.Techs.AddAsync(tech);
+        await _context.SaveChangesAsync();
+        return;
     }
 
-    public Task<Tech?> FindByIdAsync(string id)
+    public async Task<Tech?> FindByIdAsync(string id)
     {
-        throw new NotImplementedException();
+        if(Guid.TryParse(id, out Guid Id))
+        {
+            var tech = await _context.Techs.FindAsync(Id);
+            return tech;
+        }
+        
+        return null;
     }
 }
