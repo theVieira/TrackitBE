@@ -9,4 +9,4 @@ services:
       - POSTGRES_PASSWORD=root
     volumes:
       - ./docker/database:/var/lib/postgresql/data:Z # :Z to podman
-
+    restart: always
