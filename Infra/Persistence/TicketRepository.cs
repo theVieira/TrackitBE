@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using Trackit.Core.Entities;
 using Trackit.Core.Gateways;
 using Trackit.Infra.Data;
@@ -13,5 +14,11 @@ public class TicketRepository(ApplicationContext context) : ITicketGateway
         await _context.Tickets.AddAsync(ticket);
         await _context.SaveChangesAsync();
         return;
+    }
+
+    public Task<List<Ticket>> ListAsync()
+    {
+        var tickets = _context.Tickets.ToListAsync();
+        return tickets;
     }
 }
