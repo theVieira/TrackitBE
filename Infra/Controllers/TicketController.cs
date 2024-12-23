@@ -34,4 +34,18 @@ public class TicketController : ControllerBase
       return BadRequest(error.Message);
     }
   }
+
+  [HttpDelete]
+  public async Task<IActionResult> DeleteTicket([FromBody]string id, [FromServices]DeleteTicketUseCase useCase)
+  {
+    try
+    {
+      await useCase.Execute(id);
+      return Ok();
+    }
+    catch (Exception error)
+    {
+      return BadRequest(error.Message);
+    }
+  }
 }
