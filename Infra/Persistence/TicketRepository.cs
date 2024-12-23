@@ -16,6 +16,19 @@ public class TicketRepository(ApplicationContext context) : ITicketGateway
         return;
     }
 
+    public async Task DeleteAsync(Ticket ticket)
+    {
+        _context.Tickets.Remove(ticket);
+        await _context.SaveChangesAsync();
+        return;
+    }
+
+    public async Task<Ticket?> FindById(string id)
+    {
+        var ticket = await _context.Tickets.FindAsync(id);
+        return ticket;
+    }
+
     public Task<List<Ticket>> ListAsync()
     {
         var tickets = _context.Tickets.ToListAsync();
