@@ -7,17 +7,17 @@ public class Ticket : BaseEntity
 {
   public string SmallId { get; init; } = string.Empty;
   public Client Client { get; init; } = new();
-  public Action Open { get; init; } = new();
+  public Tech Open { get; init; } = new();
   public string Description { get; private set; } = string.Empty;
   public TicketStatus Status { get; private set; } = TicketStatus.Open;
   public TicketCategory Category { get; private set; }
   public TicketPriority Priority { get; private set; }
-  public List<Action> Progress { get; private set; } = [];
-  public List<Action> Finish { get; private set; } = [];
+  public List<TicketAction> Progress { get; private set; } = [];
+  public List<TicketAction> Finish { get; private set; } = [];
   public bool Recurrent { get; private set; } = false;
   public List<Attachment> Attachments { get; private set; } = [];
-  public List<Action> Notes { get; private set; } = [];
-  public List<Action> Feedbacks { get; private set; } = [];
+  public List<TicketAction> Notes { get; private set; } = [];
+  public List<TicketAction> Feedbacks { get; private set; } = [];
 
   public Ticket() {}
 
@@ -25,7 +25,7 @@ public class Ticket : BaseEntity
   {
     SmallId = Id.ToString()[..8];
     Client = client;
-    Open = new(author);
+    Open = author;
     Category = category;
     Priority = priority;
     Description = SpellCheck.CapitalizeText(description);
@@ -61,13 +61,13 @@ public class Ticket : BaseEntity
     return Attachments;
   }
 
-  public List<Action> AddNote(Action note)
+  public List<TicketAction> AddNote(TicketAction note)
   {
     Notes.Add(note);
     return Notes;
   }
 
-  public List<Action> AddFeedback(Action feedback)
+  public List<TicketAction> AddFeedback(TicketAction feedback)
   {
     Feedbacks.Add(feedback);
     return Feedbacks;
