@@ -1,6 +1,8 @@
 using System.ComponentModel.DataAnnotations;
 using Trackit.Core.Entities;
 
+namespace Trackit.Infra.DTO;
+
 public class CreateTicketDTO
 {
   [Required]
