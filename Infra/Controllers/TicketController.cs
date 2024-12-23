@@ -20,4 +20,18 @@ public class TicketController : ControllerBase
       return BadRequest(error.Message);
     }
   }
+
+[HttpGet]
+  public async Task<IActionResult> ListTicket([FromServices]ListTicketsUseCase useCase)
+  {
+    try
+    {
+      var tickets = await useCase.Execute();
+      return Ok(tickets);
+    }
+    catch (Exception error)
+    {
+      return BadRequest(error.Message);
+    }
+  }
 }
