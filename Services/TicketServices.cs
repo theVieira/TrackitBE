@@ -11,5 +11,6 @@ public static class TicketServices
     services.AddScoped<ITicketGateway, TicketRepository>();
 
     services.AddScoped<CreateTicketUseCase>();
+    services.AddScoped<ListTicketsUseCase>();
   }
 }
