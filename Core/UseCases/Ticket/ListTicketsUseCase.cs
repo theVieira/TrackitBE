@@ -1,6 +1,8 @@
 using Trackit.Core.Entities;
 using Trackit.Core.Gateways;
 
+namespace Trackit.Core.UseCases;
+
 public class ListTicketsUseCase(ITicketGateway gateway)
 {
   private readonly ITicketGateway _gateway = gateway;
