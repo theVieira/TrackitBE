@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using Trackit.Core.Entities;
 using Trackit.Core.Gateways;
 using Trackit.Infra.Data;
@@ -23,5 +24,11 @@ public class ClientRepository(ApplicationContext context) : IClientGateway
         }
 
         return null;
+    }
+
+    public async Task<List<Client>> ListAsync(int skip, int take)
+    {
+        var clients = await _context.Clients.Skip(skip).Take(take).ToListAsync();
+        return clients;
     }
 }
