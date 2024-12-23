@@ -10,6 +10,7 @@ public class ApplicationContext : DbContext
   public required DbSet<Ticket> Tickets { get; set; }
   public required DbSet<Client> Clients { get; set; }
   public required DbSet<Tech> Techs { get; set; }
+  public required DbSet<Attachment> Attachments { get; set; }
 
   protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
   {
