@@ -12,5 +12,6 @@ public static class TicketServices
 
     services.AddScoped<CreateTicketUseCase>();
     services.AddScoped<ListTicketsUseCase>();
+    services.AddScoped<DeleteTicketUseCase>();
   }
 }
