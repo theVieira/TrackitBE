@@ -5,7 +5,7 @@ public class Attachment : BaseEntity
   public string Filename { get; private set; } = string.Empty;
   public string Path { get; private set; } = string.Empty;
   public float Size { get; private set; }
-  public Action Author { get; private set; } = new();
+  public Tech Author { get; private set; } = new();
 
   public Attachment() {}
 
@@ -17,6 +17,6 @@ public class Attachment : BaseEntity
     Filename = filename;
     Path = path;
     Size = size;
-    Author = new(author);
+    Author = author;
   }
 }
