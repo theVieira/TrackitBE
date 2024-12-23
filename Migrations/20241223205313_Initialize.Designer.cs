@@ -12,7 +12,7 @@ using Trackit.Infra.Data;
 namespace Trackit.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20241220214330_Initialize")]
+    [Migration("20241223205313_Initialize")]
     partial class Initialize
     {
         /// <inheritdoc />
@@ -24,51 +24,6 @@ namespace Trackit.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
-
-            modelBuilder.Entity("Action", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("AuthorId")
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("Text")
-                        .HasColumnType("text");
-
-                    b.Property<Guid?>("TicketId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid?>("TicketId1")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid?>("TicketId2")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid?>("TicketId3")
-                        .HasColumnType("uuid");
-
-                    b.Property<int>("Type")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AuthorId");
-
-                    b.HasIndex("TicketId");
-
-                    b.HasIndex("TicketId1");
-
-                    b.HasIndex("TicketId2");
-
-                    b.HasIndex("TicketId3");
-
-                    b.ToTable("Action");
-                });
 
             modelBuilder.Entity("Trackit.Core.Entities.Attachment", b =>
                 {
@@ -102,7 +57,7 @@ namespace Trackit.Migrations
 
                     b.HasIndex("TicketId");
 
-                    b.ToTable("Attachment");
+                    b.ToTable("Attachments");
                 });
 
             modelBuilder.Entity("Trackit.Core.Entities.Client", b =>
@@ -212,7 +167,86 @@ namespace Trackit.Migrations
                     b.ToTable("Tickets");
                 });
 
-            modelBuilder.Entity("Action", b =>
+            modelBuilder.Entity("Trackit.Core.Entities.TicketAction", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("AuthorId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Text")
+                        .HasColumnType("text");
+
+                    b.Property<Guid?>("TicketId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid?>("TicketId1")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid?>("TicketId2")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid?>("TicketId3")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AuthorId");
+
+                    b.HasIndex("TicketId");
+
+                    b.HasIndex("TicketId1");
+
+                    b.HasIndex("TicketId2");
+
+                    b.HasIndex("TicketId3");
+
+                    b.ToTable("TicketAction");
+                });
+
+            modelBuilder.Entity("Trackit.Core.Entities.Attachment", b =>
+                {
+                    b.HasOne("Trackit.Core.Entities.Tech", "Author")
+                        .WithMany()
+                        .HasForeignKey("AuthorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Trackit.Core.Entities.Ticket", null)
+                        .WithMany("Attachments")
+                        .HasForeignKey("TicketId");
+
+                    b.Navigation("Author");
+                });
+
+            modelBuilder.Entity("Trackit.Core.Entities.Ticket", b =>
+                {
+                    b.HasOne("Trackit.Core.Entities.Client", "Client")
+                        .WithMany()
+                        .HasForeignKey("ClientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Trackit.Core.Entities.Tech", "Open")
+                        .WithMany()
+                        .HasForeignKey("OpenId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Client");
+
+                    b.Navigation("Open");
+                });
+
+            modelBuilder.Entity("Trackit.Core.Entities.TicketAction", b =>
                 {
                     b.HasOne("Trackit.Core.Entities.Tech", "Author")
                         .WithMany()
@@ -237,40 +271,6 @@ namespace Trackit.Migrations
                         .HasForeignKey("TicketId3");
 
                     b.Navigation("Author");
-                });
-
-            modelBuilder.Entity("Trackit.Core.Entities.Attachment", b =>
-                {
-                    b.HasOne("Action", "Author")
-                        .WithMany()
-                        .HasForeignKey("AuthorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Trackit.Core.Entities.Ticket", null)
-                        .WithMany("Attachments")
-                        .HasForeignKey("TicketId");
-
-                    b.Navigation("Author");
-                });
-
-            modelBuilder.Entity("Trackit.Core.Entities.Ticket", b =>
-                {
-                    b.HasOne("Trackit.Core.Entities.Client", "Client")
-                        .WithMany()
-                        .HasForeignKey("ClientId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Action", "Open")
-                        .WithMany()
-                        .HasForeignKey("OpenId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Client");
-
-                    b.Navigation("Open");
                 });
 
             modelBuilder.Entity("Trackit.Core.Entities.Ticket", b =>

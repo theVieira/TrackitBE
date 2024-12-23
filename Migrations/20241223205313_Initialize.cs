@@ -46,31 +46,6 @@ namespace Trackit.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Action",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    Type = table.Column<int>(type: "integer", nullable: false),
-                    AuthorId = table.Column<Guid>(type: "uuid", nullable: false),
-                    Text = table.Column<string>(type: "text", nullable: true),
-                    TicketId = table.Column<Guid>(type: "uuid", nullable: true),
-                    TicketId1 = table.Column<Guid>(type: "uuid", nullable: true),
-                    TicketId2 = table.Column<Guid>(type: "uuid", nullable: true),
-                    TicketId3 = table.Column<Guid>(type: "uuid", nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Action", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Action_Techs_AuthorId",
-                        column: x => x.AuthorId,
-                        principalTable: "Techs",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Tickets",
                 columns: table => new
                 {
@@ -89,21 +64,21 @@ namespace Trackit.Migrations
                 {
                     table.PrimaryKey("PK_Tickets", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Tickets_Action_OpenId",
-                        column: x => x.OpenId,
-                        principalTable: "Action",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
                         name: "FK_Tickets_Clients_ClientId",
                         column: x => x.ClientId,
                         principalTable: "Clients",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Tickets_Techs_OpenId",
+                        column: x => x.OpenId,
+                        principalTable: "Techs",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Attachment",
+                name: "Attachments",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
@@ -116,54 +91,99 @@ namespace Trackit.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Attachment", x => x.Id);
+                    table.PrimaryKey("PK_Attachments", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Attachment_Action_AuthorId",
+                        name: "FK_Attachments_Techs_AuthorId",
                         column: x => x.AuthorId,
-                        principalTable: "Action",
+                        principalTable: "Techs",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Attachment_Tickets_TicketId",
+                        name: "FK_Attachments_Tickets_TicketId",
                         column: x => x.TicketId,
                         principalTable: "Tickets",
                         principalColumn: "Id");
                 });
 
+            migrationBuilder.CreateTable(
+                name: "TicketAction",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Type = table.Column<int>(type: "integer", nullable: false),
+                    Text = table.Column<string>(type: "text", nullable: true),
+                    AuthorId = table.Column<Guid>(type: "uuid", nullable: false),
+                    TicketId = table.Column<Guid>(type: "uuid", nullable: true),
+                    TicketId1 = table.Column<Guid>(type: "uuid", nullable: true),
+                    TicketId2 = table.Column<Guid>(type: "uuid", nullable: true),
+                    TicketId3 = table.Column<Guid>(type: "uuid", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TicketAction", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_TicketAction_Techs_AuthorId",
+                        column: x => x.AuthorId,
+                        principalTable: "Techs",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_TicketAction_Tickets_TicketId",
+                        column: x => x.TicketId,
+                        principalTable: "Tickets",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_TicketAction_Tickets_TicketId1",
+                        column: x => x.TicketId1,
+                        principalTable: "Tickets",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_TicketAction_Tickets_TicketId2",
+                        column: x => x.TicketId2,
+                        principalTable: "Tickets",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_TicketAction_Tickets_TicketId3",
+                        column: x => x.TicketId3,
+                        principalTable: "Tickets",
+                        principalColumn: "Id");
+                });
+
             migrationBuilder.CreateIndex(
-                name: "IX_Action_AuthorId",
-                table: "Action",
+                name: "IX_Attachments_AuthorId",
+                table: "Attachments",
                 column: "AuthorId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Action_TicketId",
-                table: "Action",
+                name: "IX_Attachments_TicketId",
+                table: "Attachments",
                 column: "TicketId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Action_TicketId1",
-                table: "Action",
+                name: "IX_TicketAction_AuthorId",
+                table: "TicketAction",
+                column: "AuthorId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TicketAction_TicketId",
+                table: "TicketAction",
+                column: "TicketId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TicketAction_TicketId1",
+                table: "TicketAction",
                 column: "TicketId1");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Action_TicketId2",
-                table: "Action",
+                name: "IX_TicketAction_TicketId2",
+                table: "TicketAction",
                 column: "TicketId2");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Action_TicketId3",
-                table: "Action",
+                name: "IX_TicketAction_TicketId3",
+                table: "TicketAction",
                 column: "TicketId3");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Attachment_AuthorId",
-                table: "Attachment",
-                column: "AuthorId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Attachment_TicketId",
-                table: "Attachment",
-                column: "TicketId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Tickets_ClientId",
@@ -174,73 +194,25 @@ namespace Trackit.Migrations
                 name: "IX_Tickets_OpenId",
                 table: "Tickets",
                 column: "OpenId");
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_Action_Tickets_TicketId",
-                table: "Action",
-                column: "TicketId",
-                principalTable: "Tickets",
-                principalColumn: "Id");
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_Action_Tickets_TicketId1",
-                table: "Action",
-                column: "TicketId1",
-                principalTable: "Tickets",
-                principalColumn: "Id");
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_Action_Tickets_TicketId2",
-                table: "Action",
-                column: "TicketId2",
-                principalTable: "Tickets",
-                principalColumn: "Id");
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_Action_Tickets_TicketId3",
-                table: "Action",
-                column: "TicketId3",
-                principalTable: "Tickets",
-                principalColumn: "Id");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropForeignKey(
-                name: "FK_Action_Techs_AuthorId",
-                table: "Action");
-
-            migrationBuilder.DropForeignKey(
-                name: "FK_Action_Tickets_TicketId",
-                table: "Action");
-
-            migrationBuilder.DropForeignKey(
-                name: "FK_Action_Tickets_TicketId1",
-                table: "Action");
-
-            migrationBuilder.DropForeignKey(
-                name: "FK_Action_Tickets_TicketId2",
-                table: "Action");
-
-            migrationBuilder.DropForeignKey(
-                name: "FK_Action_Tickets_TicketId3",
-                table: "Action");
+            migrationBuilder.DropTable(
+                name: "Attachments");
 
             migrationBuilder.DropTable(
-                name: "Attachment");
-
-            migrationBuilder.DropTable(
-                name: "Techs");
+                name: "TicketAction");
 
             migrationBuilder.DropTable(
                 name: "Tickets");
 
             migrationBuilder.DropTable(
-                name: "Action");
+                name: "Clients");
 
             migrationBuilder.DropTable(
-                name: "Clients");
+                name: "Techs");
         }
     }
 }
