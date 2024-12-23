@@ -1,5 +1,4 @@
 using System.Text.Json.Serialization;
-using Trackit.Core.Entities;
 using Trackit.Utils;
 
 namespace Trackit.Core.Entities;
