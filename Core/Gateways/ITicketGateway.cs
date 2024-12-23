@@ -5,4 +5,5 @@ namespace Trackit.Core.Gateways;
 public interface ITicketGateway
 {
   Task CreateAsync(Ticket ticket);
+  Task<List<Ticket>> ListAsync();
 }
