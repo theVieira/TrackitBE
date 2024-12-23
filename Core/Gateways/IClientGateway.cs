@@ -7,4 +7,5 @@ public interface IClientGateway
 {
   Task CreateAsync(Client client);
   Task<Client?> FindByIdAsync(string id);
+  Task<List<Client>> ListAsync(int skip, int take);
 }
