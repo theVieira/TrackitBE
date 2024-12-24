@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Trackit.Core.UseCases;
+using Trackit.Infra.DTO;
 
 namespace Trackit.Infra.Controller;
 
