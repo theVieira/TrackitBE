@@ -11,5 +11,6 @@ public static class TechServices
     services.AddScoped<ITechGateway, TechRepository>();
 
     services.AddScoped<CreateTechUseCase>();
+    services.AddScoped<ListTechUseCase>();
   }
 }
