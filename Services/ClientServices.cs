@@ -11,5 +11,6 @@ public static class ClientServices
     services.AddScoped<IClientGateway, ClientRepository>();
 
     services.AddScoped<CreateClientUseCase>();
+    services.AddScoped<ListClientUseCase>();
   }
 }
