@@ -31,7 +31,13 @@ public class TicketRepository(ApplicationContext context) : ITicketGateway
 
     public Task<List<Ticket>> ListAsync()
     {
-        var tickets = _context.Tickets.ToListAsync();
+        var tickets = _context.Tickets
+            .Include(t => t.Client)
+            .Include(t => t.Open)
+            .Include(t => t.Attachments)
+            .Include(t => t.Notes)
+            .Include(t => t.Feedbacks)
+            .ToListAsync();
         return tickets;
     }
 }
