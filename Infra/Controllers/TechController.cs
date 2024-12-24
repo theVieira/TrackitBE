@@ -21,4 +21,18 @@ public class TechController : ControllerBase
       return BadRequest(error.Message);
     }
   }
+
+  [HttpGet]
+  public async Task<IActionResult> ListTech([FromQuery]PaginationDTO req, [FromServices]ListTechUseCase useCase)
+  {
+    try
+    {
+      var techs = await useCase.Execute(req.Skip, req.Take);
+      return Ok(techs);
+    }
+    catch (Exception error)
+    {
+      return BadRequest(error.Message);
+    }
+  }
 }
