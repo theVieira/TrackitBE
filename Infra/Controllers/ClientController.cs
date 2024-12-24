@@ -21,4 +21,18 @@ public class ClientController : ControllerBase
       return BadRequest(error.Message);
     }
   }
+
+  [HttpGet]
+  public async Task<IActionResult> ListClients([FromQuery]PaginationDTO req, [FromServices]ListClientUseCase useCase)
+  {
+    try
+    {
+      var clients = await useCase.Execute(req.Skip, req.Take);
+      return Ok(clients);
+    }
+    catch (Exception error)
+    {
+      return BadRequest(error.Message);
+    }
+  }
 }
