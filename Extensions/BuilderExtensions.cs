@@ -14,6 +14,7 @@ public static class BuilderExtensions
     builder.Services.AddTicketServices();
     builder.Services.AddClientServices();
     builder.Services.AddTechServices();
+    builder.Services.AddTelegramServices();
 
     builder.Services.AddControllers()
     .AddJsonOptions(options =>
