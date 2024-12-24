@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using Trackit.Core.Entities;
 using Trackit.Core.Gateways;
 using Trackit.Infra.Data;
@@ -24,5 +25,11 @@ public class TechRepository(ApplicationContext context) : ITechGateway
         }
         
         return null;
+    }
+
+    public async Task<List<Tech>> ListAsync(int skip, int take)
+    {
+        var techs = await _context.Techs.Skip(skip).Take(take).ToListAsync();
+        return techs;
     }
 }
