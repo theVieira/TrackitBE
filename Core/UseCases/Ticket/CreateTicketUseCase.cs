@@ -6,12 +6,14 @@ namespace Trackit.Core.UseCases;
 public class CreateTicketUseCase(
     ITicketGateway ticketGateway,
     IClientGateway clientGateway,
-    ITechGateway techGateway
+    ITechGateway techGateway,
+    IBotMessage botMessage
     )
 {
   private readonly ITicketGateway _ticketGateway = ticketGateway;
   private readonly IClientGateway _clientGateway = clientGateway;
   private readonly ITechGateway _techGateway = techGateway;
+  private readonly IBotMessage _botMessage = botMessage;
 
   public async Task Execute(string clientId, string techId, TicketCategory category, TicketPriority priority, string description)
   {
@@ -22,6 +24,8 @@ public class CreateTicketUseCase(
     var ticket = new Ticket(client, tech, category, priority, description);
 
     await _ticketGateway.CreateAsync(ticket);
+
+    await _botMessage.SendMessage($"Novo chamado criado\nCliente: {client.Name}\nCriado por: {tech.Name}\nDescrição: {ticket.Description}\nPrioridade: {ticket.Priority}\nCategoria: {ticket.Category}");
 
     return;
   }
