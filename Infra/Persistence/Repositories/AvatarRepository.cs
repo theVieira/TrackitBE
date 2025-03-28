@@ -18,7 +18,7 @@ public class AvatarRepository(AppDbContext context) : IAvatar
         throw new NotImplementedException();
     }
 
-    public Task<List<Avatar>> ListAsync(int skip, int take)
+    public Task<BaseListResponse<Avatar>> ListAsync(int skip, int take)
     {
         throw new NotImplementedException();
     }

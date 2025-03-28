@@ -24,7 +24,7 @@ public class TicketRepository(AppDbContext context) : ITicket
         return ticket;
     }
 
-    public Task<List<Ticket>> ListAsync(int skip, int take)
+    public Task<BaseListResponse<Ticket>> ListAsync(int skip, int take)
     {
         throw new NotImplementedException();
     }
@@ -34,9 +34,10 @@ public class TicketRepository(AppDbContext context) : ITicket
         throw new NotImplementedException();
     }
 
-    public async Task<List<Ticket>> ListByClientAsync(int skip, int take, TicketFilters filters, string clientName)
+    public async Task<BaseListResponse<Ticket>> ListByClientAsync(int skip, int take, TicketFilters filters, string clientName)
     {
-        var tickets = await _context.Tickets
+        var tickets = 
+            await _context.Tickets
             .AsNoTracking()
             .Include(x => x.Client)
             .Include(x => x.CreatedBy)
@@ -44,14 +45,12 @@ public class TicketRepository(AppDbContext context) : ITicket
             .Where(x => filters.Status.Contains(x.Status))
             .Where(x => filters.Priority.Contains(x.Priority))
             .Where(x => clientName == x.Client.Name)
-            .Skip(skip)
-            .Take(take)
             .ToListAsync();
         
-        return tickets;
+        return new(tickets.Skip(skip).Take(take).ToList(), tickets.Count);
     }
 
-    public async Task<List<Ticket>> ListAsync(int skip, int take, TicketFilters filters)
+    public async Task<BaseListResponse<Ticket>> ListAsync(int skip, int take, TicketFilters filters)
     {
         var tickets = await _context.Tickets
             .AsNoTracking()
@@ -60,10 +59,8 @@ public class TicketRepository(AppDbContext context) : ITicket
             .Where(x => filters.Category.Contains(x.Category))
             .Where(x => filters.Status.Contains(x.Status))
             .Where(x => filters.Priority.Contains(x.Priority))
-            .Skip(skip)
-            .Take(take)
             .ToListAsync();
 
-        return tickets;
+        return new(tickets.Skip(skip).Take(take).ToList(), tickets.Count);
     }
 }

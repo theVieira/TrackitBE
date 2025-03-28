@@ -23,7 +23,7 @@ public class GetTicketsEndpoint : IEndpoint
         {
             var filtredTickets = await context
                 .ListByClientAsync(skip, take, new TicketFilters(status, category, priority), client);
-        
+            
             return Results.Ok(filtredTickets);
         }
         
@@ -33,3 +33,5 @@ public class GetTicketsEndpoint : IEndpoint
         return Results.Ok(allTickets);
     }
 }
+
+public record GetTicketsResponse(List<Domain.Entities.Ticket> Tickets, int Total);

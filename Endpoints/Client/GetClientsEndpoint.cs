@@ -15,12 +15,15 @@ public abstract class GetClientsEndpoint : IEndpoint
         [FromServices]IClient context
     )
     {
-        var clients = await context.ListAsync(skip ?? 0, take ?? 20);
+        var response = await context.ListAsync(skip ?? 0, take ?? 20);
+        
+        var filtredClients = response.Items.Where(x => x.Name == clientName).ToList();
         
         if(!string.IsNullOrWhiteSpace(clientName))
-            return Results.Ok(clients.Where(x => x.Name == clientName).ToList());
+            return Results.Ok(new { Items = filtredClients, Total = response.Total });
+            
         
-        return Results.Ok(clients);
+        return Results.Ok(response);
         
     }
 }

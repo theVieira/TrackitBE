@@ -24,16 +24,16 @@ public class ClientRepository(AppDbContext context) : IClient
         return client;
     }
 
-    public async Task<List<Client>> ListAsync(int skip, int take)
+    public async Task<BaseListResponse<Client>> ListAsync(int skip, int take)
     {
         var clients =
             await _context.Clients
                 .AsNoTracking()
-                .Skip(skip)
-                .Take(take)
                 .ToListAsync();
         
-        return clients;
+        return new(
+            clients.Skip(skip).Take(take).ToList(), 
+            clients.Count);
     }
 
     public Task UpdateAsync(Client entity)

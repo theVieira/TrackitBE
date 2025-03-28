@@ -23,16 +23,17 @@ public class TechRepository(AppDbContext context) : ITech
         return tech;
     }
 
-    public async Task<List<Tech>> ListAsync(int skip, int take)
+    public async Task<BaseListResponse<Tech>> ListAsync(int skip, int take)
     {
         var techs =
             await _context.Techs
                 .AsNoTracking()
-                .Skip(skip)
-                .Take(take)
                 .ToListAsync();
         
-        return techs;
+        return new(
+            techs.Skip(skip).Take(take).ToList(),
+            techs.Count
+        );
     }
 
     public Task UpdateAsync(Tech entity)
