@@ -8,7 +8,7 @@ public class AvatarConfiguration : IEntityTypeConfiguration<Avatar>
 {
     public void Configure(EntityTypeBuilder<Avatar> builder)
     {
-        builder.ToTable("avatar");
+        builder.ToTable("Avatars");
         
         builder.HasKey(x => x.Id);
         builder.Property(x => x.Id).ValueGeneratedNever();
