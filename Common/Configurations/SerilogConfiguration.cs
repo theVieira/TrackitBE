@@ -7,7 +7,7 @@ public static class SerilogConfiguration
 {
     public static void AddSerilogConfiguration(this ConfigureHostBuilder host)
     {
-        var directoryLogs = Directory.GetCurrentDirectory() + "logs/";
+        var directoryLogs = Path.Combine(Directory.GetCurrentDirectory(), "logs/");
 
         host.UseSerilog
         (
