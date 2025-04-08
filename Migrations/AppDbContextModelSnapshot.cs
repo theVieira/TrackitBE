@@ -71,6 +71,47 @@ namespace Trackit.Migrations
                     b.ToTable("Attachments", (string)null);
                 });
 
+            modelBuilder.Entity("Trackit.Domain.Entities.Avatar", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Filename")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("Path")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("SmallId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<Guid>("TechId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Url")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TechId")
+                        .IsUnique();
+
+                    b.ToTable("Avatars", (string)null);
+                });
+
             modelBuilder.Entity("Trackit.Domain.Entities.Client", b =>
                 {
                     b.Property<Guid>("Id")
@@ -131,6 +172,12 @@ namespace Trackit.Migrations
                     b.Property<Guid>("Id")
                         .HasColumnType("uuid");
 
+                    b.Property<Guid?>("AvatarId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid?>("AvatarId1")
+                        .HasColumnType("uuid");
+
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
@@ -169,6 +216,8 @@ namespace Trackit.Migrations
                         .HasColumnType("text");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("AvatarId1");
 
                     b.HasIndex("Email")
                         .IsUnique();
@@ -381,6 +430,26 @@ namespace Trackit.Migrations
                     b.Navigation("Ticket");
 
                     b.Navigation("UploadedBy");
+                });
+
+            modelBuilder.Entity("Trackit.Domain.Entities.Avatar", b =>
+                {
+                    b.HasOne("Trackit.Domain.Entities.Tech", "Tech")
+                        .WithOne()
+                        .HasForeignKey("Trackit.Domain.Entities.Avatar", "TechId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Tech");
+                });
+
+            modelBuilder.Entity("Trackit.Domain.Entities.Tech", b =>
+                {
+                    b.HasOne("Trackit.Domain.Entities.Avatar", "Avatar")
+                        .WithMany()
+                        .HasForeignKey("AvatarId1");
+
+                    b.Navigation("Avatar");
                 });
 
             modelBuilder.Entity("Trackit.Domain.Entities.TextAction", b =>
