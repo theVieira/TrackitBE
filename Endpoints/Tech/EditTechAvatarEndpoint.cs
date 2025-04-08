@@ -1,6 +1,6 @@
-using System.Net;
+using System.ComponentModel.DataAnnotations;
+using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.JsonWebTokens;
 using Trackit.Authentication;
 using Trackit.Domain.Entities;
 using Trackit.Domain.Interfaces;
@@ -11,11 +11,7 @@ public class EditTechAvatarEndpoint : IEndpoint
 {
     public static void Map(IEndpointRouteBuilder app)
         => app.MapPost("avatar", HandleAsync)
-            .Accepts<IFormFile>("multipart/form-data")
-            .Produces(StatusCodes.Status200OK)
-            .Produces(StatusCodes.Status401Unauthorized)
-            .WithName("EditTechAvatar")
-            .WithTags("Techs");
+            .DisableAntiforgery();
 
     [Consumes("multipart/form-data")]
     private static async Task<IResult> HandleAsync(
@@ -27,31 +23,40 @@ public class EditTechAvatarEndpoint : IEndpoint
     )
     {
         var authorizationHeader = httpContext.Request.Headers["Authorization"].ToString();
-        var authorizationToken = authorizationHeader.Split("Bearer ");
+        
+        if(string.IsNullOrEmpty(authorizationHeader)) return Results.Unauthorized();
+        
+        var authorizationToken = authorizationHeader.Split("Bearer ")[1];
 
-        var tokenClaim = tokenManager.GetClaimValue(JwtRegisteredClaimNames.Sub, authorizationToken[1]);
- 
-        if(!Guid.TryParse(tokenClaim, out var id)) return Results.Unauthorized();
+        var id = tokenManager.GetClaimValue(authorizationToken, ClaimTypes.NameIdentifier);
 
-        var tech = await techContext.FindByIdAsync(id);
+        if (!Guid.TryParse(id, out Guid techId)) return Results.Unauthorized();
+        
+        var tech = await techContext.FindByIdAsync(techId);
 
         if(tech is null) return Results.Unauthorized();
 
-        var avatar = Avatar.Factory.Create(Settings.UploadUrl, request.File.FileName, Settings.UploadPath);
+        var directory = Path.Combine(Directory.GetCurrentDirectory(), Settings.UploadPath);
+        
+        if(!Directory.Exists(directory)) Directory.CreateDirectory(directory);
+        
+        var path = Path.Combine(directory, $"{tech.Id}.png");
+        
+        var avatar = Avatar.Factory.Create(Settings.UploadUrl, request.File.FileName, path, tech.Id);
 
-        await using (var fileStream = new FileStream(Settings.UploadPath, FileMode.Create))
+        await avatarContext.AddAsync(avatar);
+        
+        await using (var fileStream = new FileStream(path, FileMode.Create))
         {
             await request.File.CopyToAsync(fileStream);
         }
 
-        await avatarContext.AddAsync(avatar);
-        
         return Results.Ok();
     }
 }
 
 public class EditTechAvatarDto
 {
-    [FromForm]
+    [Required]
     public required IFormFile File { get; set; }
 }
