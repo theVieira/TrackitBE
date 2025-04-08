@@ -13,15 +13,19 @@ public class Avatar : BaseEntity
     [JsonIgnore]
     [Required]
     public string Path { get; private set; }
+    [Required]
+    public Guid TechId { get; init; }
+    public Tech Tech { get; init; }
     
     // EF
     private Avatar() { }
     
-    private Avatar(string url, string filename, string path)
+    private Avatar(string url, string filename, string path, Guid techId)
     {
         Url = url;
         Filename = filename;
         Path = path;
+        TechId = techId;
     }
 
     public static class Factory
@@ -29,11 +33,12 @@ public class Avatar : BaseEntity
         public static Avatar Create(
             string url,
             string filename,
-            string path
+            string path,
+            Guid techId
         )
         {
             return new Avatar(
-                url, filename, path    
+                url, filename, path, techId
             );
         }
     }

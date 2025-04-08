@@ -27,6 +27,8 @@ public class Tech : BaseEntity
     
     [JsonIgnore]
     public ICollection<Ticket> Tickets { get; init; }
+    public Avatar? Avatar { get; private set; }
+    public Guid? AvatarId { get; private set; }
 
     // EF
     private Tech() { }
