@@ -16,5 +16,11 @@ public class AvatarConfiguration : IEntityTypeConfiguration<Avatar>
         builder.Property(x => x.Filename).IsRequired();
         builder.Property(x => x.Path).IsRequired();
         builder.Property(x => x.Url).IsRequired();
+        
+        builder
+            .HasOne<Tech>(x => x.Tech)
+            .WithOne(x => x.Avatar)
+            .HasForeignKey<Tech>(x => x.AvatarId)
+            .OnDelete(DeleteBehavior.NoAction);
     }
 }
