@@ -21,6 +21,6 @@ public class AvatarConfiguration : IEntityTypeConfiguration<Avatar>
             .HasOne<Tech>(x => x.Tech)
             .WithOne(x => x.Avatar)
             .HasForeignKey<Tech>(x => x.AvatarId)
-            .OnDelete(DeleteBehavior.NoAction);
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

@@ -33,11 +33,5 @@ public class TechConfiguration : IEntityTypeConfiguration<Tech>
             .WithOne(x => x.CreatedBy)
             .HasForeignKey(x => x.ClientId)
             .OnDelete(DeleteBehavior.Cascade);
-
-        builder
-            .HasOne<Avatar>()
-            .WithOne(x => x.Tech)
-            .HasForeignKey<Avatar>(x => x.TechId)
-            .OnDelete(DeleteBehavior.Cascade);
     }
 }
