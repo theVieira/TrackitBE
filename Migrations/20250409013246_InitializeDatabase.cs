@@ -12,6 +12,25 @@ namespace Trackit.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "Avatars",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Url = table.Column<string>(type: "text", nullable: false),
+                    Filename = table.Column<string>(type: "text", nullable: false),
+                    Path = table.Column<string>(type: "text", nullable: false),
+                    TechId = table.Column<Guid>(type: "uuid", nullable: false),
+                    SmallId = table.Column<string>(type: "text", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
+                    DeletedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Avatars", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Clients",
                 columns: table => new
                 {
@@ -32,46 +51,6 @@ namespace Trackit.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Attachments",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    UploadedById = table.Column<Guid>(type: "uuid", nullable: false),
-                    TicketId = table.Column<Guid>(type: "uuid", nullable: false),
-                    Filename = table.Column<string>(type: "text", nullable: false),
-                    Size = table.Column<long>(type: "bigint", nullable: false),
-                    Path = table.Column<string>(type: "text", nullable: false),
-                    Url = table.Column<string>(type: "text", nullable: false),
-                    SmallId = table.Column<string>(type: "text", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
-                    DeletedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Attachments", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Avatars",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    Url = table.Column<string>(type: "text", nullable: false),
-                    Filename = table.Column<string>(type: "text", nullable: false),
-                    Path = table.Column<string>(type: "text", nullable: false),
-                    TechId = table.Column<Guid>(type: "uuid", nullable: false),
-                    SmallId = table.Column<string>(type: "text", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
-                    DeletedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Avatars", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Techs",
                 columns: table => new
                 {
@@ -81,7 +60,6 @@ namespace Trackit.Migrations
                     Phone = table.Column<string>(type: "character varying(15)", maxLength: 15, nullable: false),
                     Email = table.Column<string>(type: "character varying(60)", maxLength: 60, nullable: false),
                     Role = table.Column<string>(type: "text", nullable: false),
-                    AvatarId1 = table.Column<Guid>(type: "uuid", nullable: true),
                     AvatarId = table.Column<Guid>(type: "uuid", nullable: true),
                     SmallId = table.Column<string>(type: "text", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
@@ -92,10 +70,11 @@ namespace Trackit.Migrations
                 {
                     table.PrimaryKey("PK_Techs", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Techs_Avatars_AvatarId1",
-                        column: x => x.AvatarId1,
+                        name: "FK_Techs_Avatars_AvatarId",
+                        column: x => x.AvatarId,
                         principalTable: "Avatars",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -128,6 +107,37 @@ namespace Trackit.Migrations
                         name: "FK_Tickets_Techs_CreatedById",
                         column: x => x.CreatedById,
                         principalTable: "Techs",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Attachments",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    UploadedById = table.Column<Guid>(type: "uuid", nullable: false),
+                    TicketId = table.Column<Guid>(type: "uuid", nullable: false),
+                    Filename = table.Column<string>(type: "text", nullable: false),
+                    Size = table.Column<long>(type: "bigint", nullable: false),
+                    Path = table.Column<string>(type: "text", nullable: false),
+                    Url = table.Column<string>(type: "text", nullable: false),
+                    SmallId = table.Column<string>(type: "text", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
+                    DeletedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Attachments", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Attachments_Techs_UploadedById",
+                        column: x => x.UploadedById,
+                        principalTable: "Techs",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Attachments_Tickets_TicketId",
+                        column: x => x.TicketId,
+                        principalTable: "Tickets",
                         principalColumn: "Id");
                 });
 
@@ -204,12 +214,6 @@ namespace Trackit.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Avatars_TechId",
-                table: "Avatars",
-                column: "TechId",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Clients_Cnpj",
                 table: "Clients",
                 column: "Cnpj",
@@ -228,9 +232,10 @@ namespace Trackit.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Techs_AvatarId1",
+                name: "IX_Techs_AvatarId",
                 table: "Techs",
-                column: "AvatarId1");
+                column: "AvatarId",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Techs_Email",
@@ -273,37 +278,11 @@ namespace Trackit.Migrations
                 name: "IX_TimeActions_TicketId",
                 table: "TimeActions",
                 column: "TicketId");
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_Attachments_Techs_UploadedById",
-                table: "Attachments",
-                column: "UploadedById",
-                principalTable: "Techs",
-                principalColumn: "Id");
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_Attachments_Tickets_TicketId",
-                table: "Attachments",
-                column: "TicketId",
-                principalTable: "Tickets",
-                principalColumn: "Id");
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_Avatars_Techs_TechId",
-                table: "Avatars",
-                column: "TechId",
-                principalTable: "Techs",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Cascade);
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropForeignKey(
-                name: "FK_Avatars_Techs_TechId",
-                table: "Avatars");
-
             migrationBuilder.DropTable(
                 name: "Attachments");
 

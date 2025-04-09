@@ -106,9 +106,6 @@ namespace Trackit.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("TechId")
-                        .IsUnique();
-
                     b.ToTable("Avatars", (string)null);
                 });
 
@@ -175,9 +172,6 @@ namespace Trackit.Migrations
                     b.Property<Guid?>("AvatarId")
                         .HasColumnType("uuid");
 
-                    b.Property<Guid?>("AvatarId1")
-                        .HasColumnType("uuid");
-
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
@@ -217,7 +211,8 @@ namespace Trackit.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AvatarId1");
+                    b.HasIndex("AvatarId")
+                        .IsUnique();
 
                     b.HasIndex("Email")
                         .IsUnique();
@@ -432,22 +427,12 @@ namespace Trackit.Migrations
                     b.Navigation("UploadedBy");
                 });
 
-            modelBuilder.Entity("Trackit.Domain.Entities.Avatar", b =>
-                {
-                    b.HasOne("Trackit.Domain.Entities.Tech", "Tech")
-                        .WithOne()
-                        .HasForeignKey("Trackit.Domain.Entities.Avatar", "TechId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Tech");
-                });
-
             modelBuilder.Entity("Trackit.Domain.Entities.Tech", b =>
                 {
                     b.HasOne("Trackit.Domain.Entities.Avatar", "Avatar")
-                        .WithMany()
-                        .HasForeignKey("AvatarId1");
+                        .WithOne("Tech")
+                        .HasForeignKey("Trackit.Domain.Entities.Tech", "AvatarId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.Navigation("Avatar");
                 });
@@ -546,6 +531,12 @@ namespace Trackit.Migrations
                         .IsRequired();
 
                     b.Navigation("Ticket");
+                });
+
+            modelBuilder.Entity("Trackit.Domain.Entities.Avatar", b =>
+                {
+                    b.Navigation("Tech")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Trackit.Domain.Entities.Client", b =>
