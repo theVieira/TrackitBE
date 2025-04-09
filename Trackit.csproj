@@ -24,7 +24,8 @@
 
   <ItemGroup>
     <Folder Include="Migrations\" />
-    <Folder Include="Uploads\" />
+    <Folder Include="Uploads\Attachments\" />
+    <Folder Include="Uploads\Avatars\" />
   </ItemGroup>
 
 </Project>
