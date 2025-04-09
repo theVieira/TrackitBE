@@ -13,6 +13,7 @@ public class TimeAction : BaseEntity
     public TimeActionType Type { get; init; }
     
     // EF
+    #pragma warning disable
     protected TimeAction() { }
 
     protected TimeAction(

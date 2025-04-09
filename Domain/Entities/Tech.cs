@@ -31,6 +31,7 @@ public class Tech : BaseEntity
     public Guid? AvatarId { get; private set; }
 
     // EF
+    #pragma warning disable
     private Tech() { }
 
     public bool CheckPassword(string password)

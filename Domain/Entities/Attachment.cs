@@ -25,7 +25,8 @@ public class Attachment : BaseEntity
     public string Url { get; init; }    
     
     
-    // EF Constructor
+    // EF
+    #pragma warning disable
     protected Attachment() { }
 
     protected Attachment(

@@ -24,6 +24,7 @@ public sealed class Client : BaseEntity
     public ICollection<Ticket> Tickets { get; init; }
 
     // EF
+    #pragma warning disable
     private Client() { }
 
     private Client(

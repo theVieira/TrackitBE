@@ -18,6 +18,7 @@ public class Avatar : BaseEntity
     public Tech Tech { get; init; }
     
     // EF
+    #pragma warning disable
     private Avatar() { }
     
     private Avatar(string url, string filename, string path, Guid techId)

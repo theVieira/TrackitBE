@@ -19,6 +19,7 @@ public class TextAction : BaseEntity
     public Ticket Ticket { get; init; } = null!;
     
     // EF
+    #pragma warning disable
     protected TextAction() { }
 
     protected TextAction(

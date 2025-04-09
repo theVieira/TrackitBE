@@ -33,6 +33,7 @@ public class Ticket : BaseEntity
     public ICollection<Attachment> Attachments { get; init; } = [];
     
     // EF
+    #pragma warning disable
     private Ticket() { }
 
     private Ticket(
