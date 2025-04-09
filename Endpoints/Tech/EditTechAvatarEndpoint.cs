@@ -15,7 +15,7 @@ public class EditTechAvatarEndpoint : IEndpoint
 
     [Consumes("multipart/form-data")]
     private static async Task<IResult> HandleAsync(
-        [FromForm]EditTechAvatarDto request,
+        [FromForm]EditTechAvatarRequest request,
         [FromServices]ITokenManager tokenManager,
         [FromServices]ITech techContext,
         [FromServices]IAvatar avatarContext,
@@ -36,13 +36,15 @@ public class EditTechAvatarEndpoint : IEndpoint
 
         if(tech is null) return Results.Unauthorized();
 
-        var directory = Path.Combine(Directory.GetCurrentDirectory(), Settings.UploadPath);
+        var directory = Path.Combine(Directory.GetCurrentDirectory(), Settings.UploadPath, "Avatars");
         
         if(!Directory.Exists(directory)) Directory.CreateDirectory(directory);
+
+        var filename = $"{tech.SmallId}-{request.File.FileName}";
         
-        var path = Path.Combine(directory, $"{tech.Id}.png");
+        var path = Path.Combine(directory, filename);
         
-        var avatar = Avatar.Factory.Create(Settings.UploadUrl, request.File.FileName, path, tech.Id);
+        var avatar = Avatar.Factory.Create($"{Settings.UploadUrl}/avatars/{filename}", filename, path, tech.Id);
 
         await avatarContext.AddAsync(avatar);
         
@@ -55,7 +57,7 @@ public class EditTechAvatarEndpoint : IEndpoint
     }
 }
 
-public class EditTechAvatarDto
+public class EditTechAvatarRequest
 {
     [Required]
     public required IFormFile File { get; set; }
