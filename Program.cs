@@ -1,3 +1,4 @@
+using System.Drawing;
 using DotNetEnv;
 using Trackit.Common.Extensions;
 using Trackit.Infra.Persistence;
@@ -20,7 +21,8 @@ using (var scope = app.Services.CreateScope())
     var defaultUser = new CreateDefaultUser(context, config);
     await defaultUser.Create();
 
-    Console.WriteLine("🚀");    
+    Console.ForegroundColor = ConsoleColor.Green;
+    Console.WriteLine("Running API - 🚀");
 }
 
 app.AddAppConfiguration();
