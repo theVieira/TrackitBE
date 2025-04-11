@@ -14,7 +14,9 @@ public class Avatar : BaseEntity
     [Required]
     public string Path { get; private set; }
     [Required]
+    [JsonIgnore]
     public Guid TechId { get; init; }
+    [JsonIgnore]
     public Tech Tech { get; init; }
     
     // EF
