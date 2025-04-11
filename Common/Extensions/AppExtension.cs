@@ -16,15 +16,24 @@ public static class AppExtension
         
         app.UseHttpsRedirection();
 
-        var uploadDirectory = Path.Combine(Directory.GetCurrentDirectory(), "Uploads");
-        if (!Directory.Exists(uploadDirectory)) Directory.CreateDirectory(uploadDirectory);
+        var avatarUploadDirectory = Path.Combine(Directory.GetCurrentDirectory(), "Uploads", "Avatars");
+        if (!Directory.Exists(avatarUploadDirectory)) Directory.CreateDirectory(avatarUploadDirectory);
+        
+        var attachmentUploadDirectory = Path.Combine(Directory.GetCurrentDirectory(), "Uploads", "Attachments");
+        if (!Directory.Exists(attachmentUploadDirectory)) Directory.CreateDirectory(attachmentUploadDirectory);
         
         app.UseStaticFiles(new StaticFileOptions
         {
-            FileProvider = new PhysicalFileProvider(uploadDirectory),
-            RequestPath = "/Uploads"
+            FileProvider = new PhysicalFileProvider(avatarUploadDirectory),
+            RequestPath = "/uploads/avatars"
         });
 
+        app.UseStaticFiles(new StaticFileOptions
+        {
+            FileProvider = new PhysicalFileProvider(attachmentUploadDirectory),
+            RequestPath = "/uploads/attachments"
+        });
+        
         app.UseAuthentication();
         app.UseAuthorization();
         
