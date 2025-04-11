@@ -18,7 +18,10 @@ public class TechRepository(AppDbContext context) : ITech
 
     public async Task<Tech?> FindByIdAsync(Guid id)
     {
-        var tech = await _context.Techs.FindAsync(id);
+        var tech =
+            await _context.Techs
+                .Include(x => x.Avatar)
+                .FirstOrDefaultAsync(x => x.Id == id);
         
         return tech;
     }
@@ -27,6 +30,7 @@ public class TechRepository(AppDbContext context) : ITech
     {
         var techs =
             await _context.Techs
+                .Include(x => x.Avatar)
                 .AsNoTracking()
                 .ToListAsync();
         
@@ -36,14 +40,16 @@ public class TechRepository(AppDbContext context) : ITech
         );
     }
 
-    public Task UpdateAsync(Tech entity)
+    public async Task UpdateAsync(Tech entity)
     {
-        throw new NotImplementedException();
+        _context.Techs.Update(entity);
+        await _context.SaveChangesAsync();
     }
 
     public async Task<Tech?> FindByEmailAsync(string email)
     {
         var tech = await _context.Techs
+            .Include(x => x.Avatar)
             .AsNoTracking()
             .FirstOrDefaultAsync(x => x.Email == email);
 
