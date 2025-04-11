@@ -34,6 +34,12 @@ public class Tech : BaseEntity
     #pragma warning disable
     private Tech() { }
 
+    public void SetAvatar(Avatar avatar)
+    {
+        this.Avatar = avatar;
+        this.AvatarId = avatar.Id;
+    }
+
     public bool CheckPassword(string password)
     {
         return BCrypt.Net.BCrypt.Verify(password, Password);
