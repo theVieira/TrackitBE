@@ -48,6 +48,10 @@ public class EditTechAvatarEndpoint : IEndpoint
 
         await avatarContext.AddAsync(avatar);
         
+        tech.SetAvatar(avatar);
+        
+        await techContext.UpdateAsync(tech);
+        
         await using (var fileStream = new FileStream(path, FileMode.Create))
         {
             await request.File.CopyToAsync(fileStream);
