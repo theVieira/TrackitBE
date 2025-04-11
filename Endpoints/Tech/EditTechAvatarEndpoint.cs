@@ -15,7 +15,7 @@ public class EditTechAvatarEndpoint : IEndpoint
 
     [Consumes("multipart/form-data")]
     private static async Task<IResult> HandleAsync(
-        [FromForm]EditTechAvatarRequest request,
+        EditTechAvatarRequest request,
         [FromServices]ITokenManager tokenManager,
         [FromServices]ITech techContext,
         [FromServices]IAvatar avatarContext,

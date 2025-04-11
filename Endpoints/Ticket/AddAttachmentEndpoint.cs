@@ -16,7 +16,7 @@ public class AddAttachmentEndpoint : IEndpoint
     [Consumes("multipart/form-data")]
     private static async Task<IResult> HandleAsync(
         HttpContext context,
-        [FromForm]AddAttachmentRequest request,
+        AddAttachmentRequest request,
         [FromServices]ITokenManager tokenManager,
         [FromServices]ITicket ticketContext,
         [FromServices]IAttachment attachmentContext
