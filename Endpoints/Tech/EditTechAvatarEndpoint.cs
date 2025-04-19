@@ -15,7 +15,7 @@ public class EditTechAvatarEndpoint : IEndpoint
 
     [Consumes("multipart/form-data")]
     private static async Task<IResult> HandleAsync(
-        EditTechAvatarRequest request,
+        [FromForm]EditTechAvatarRequest request,
         [FromServices]ITokenManager tokenManager,
         [FromServices]ITech techContext,
         [FromServices]IAvatar avatarContext,
@@ -64,5 +64,6 @@ public class EditTechAvatarEndpoint : IEndpoint
 public class EditTechAvatarRequest
 {
     [Required]
+    [FromForm(Name = "file")]
     public required IFormFile File { get; set; }
 }
