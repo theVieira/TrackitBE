@@ -12,6 +12,7 @@ public class Attachment : BaseEntity
     [JsonIgnore]
     [Required]
     public Guid TicketId { get; init; }
+    [JsonIgnore]
     public Ticket Ticket { get; init; } = null!;
     [Required]
     public string Filename { get; init; }
