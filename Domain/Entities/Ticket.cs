@@ -55,13 +55,39 @@ public class Ticket : BaseEntity
         Category = category;
     }
 
-    public void SetProgress(Progress progress)
+    public void FinalizeTicket(Finish finish)
     {
-        if(Status is not Status.Open)
+        if (Status is not Status.Progress && Status is not Status.Cancelled)
+            throw new Exception("Ticket status must be progress to update the status for finish");
+
+        Status = Status.Finish;
+        Finish.Add(finish);
+    }
+    
+    public void ToMeetTicket(Progress progress)
+    {
+        if(Status is not Status.Open && Status is not Status.Cancelled)
             throw new Exception("Ticket status must be open to update the status for progress");
         
         Status = Status.Progress;
         Progress.Add(progress);
+    }
+
+    public void CancelTicket()
+    {
+        if (Status is Status.Finish)
+            throw new Exception("Not possible cancel finished ticket");
+        
+        Status = Status.Cancelled;
+    }
+
+    public void ChangeCategory(Category category)
+    {
+        if (Category == category)
+            throw new Exception("Category already this is");
+
+        Status = Status.Open;
+        Category = category;
     }
     
     public static class Factory
