@@ -16,7 +16,7 @@ public class AddAttachmentEndpoint : IEndpoint
     [Consumes("multipart/form-data")]
     private static async Task<IResult> HandleAsync(
         HttpContext context,
-        AddAttachmentRequest request,
+        [FromForm]AddAttachmentRequest request,
         [FromServices]ITokenManager tokenManager,
         [FromServices]ITicket ticketContext,
         [FromServices]IAttachment attachmentContext
@@ -28,10 +28,8 @@ public class AddAttachmentEndpoint : IEndpoint
         var authorizationToken = authorizationHeader.Split("Bearer ")[1];
         var id = tokenManager.GetClaimValue(authorizationToken, ClaimTypes.NameIdentifier);
         
-        if(!Guid.TryParse(id, out Guid techId)) return Results.Unauthorized();
+        if(!Guid.TryParse(id, out Guid techId) || !Guid.TryParse(request.TicketId, out Guid ticketId)) return Results.Unauthorized();
 
-        if(!Guid.TryParse(request.TicketId, out Guid ticketId)) return Results.Unauthorized();
-        
         var findTicket = await ticketContext.FindByIdAsync(ticketId);
         if(findTicket is null) return Results.NotFound("Ticket not found");
 
@@ -44,7 +42,7 @@ public class AddAttachmentEndpoint : IEndpoint
         var path = Path.Combine(directory, filename);
         
         var attachment = Attachment.Factory.Create(
-            findTicket.Id, techId, request.File.FileName, request.File.Length, path, $"{Settings.UploadPath}/attachments/{filename}"     
+            findTicket.Id, techId, request.File.FileName, request.File.Length, path, $"{Settings.UploadUrl}/attachments/{filename}"     
         );
         
         await attachmentContext.AddAsync(attachment);
@@ -61,6 +59,7 @@ public class AddAttachmentEndpoint : IEndpoint
 public class AddAttachmentRequest
 {
     [Required]
+    [FromForm(Name = "file")]
     public required IFormFile File { get; set; }
     public required string TicketId { get; set; }
 }

@@ -39,7 +39,8 @@ public static class Endpoints
             .MapEndpoint<CreateTicketEndpoint>()
             .MapEndpoint<DeleteTicketEndpoint>()
             .MapEndpoint<GetTicketByIdEndpoint>()
-            .MapEndpoint<AddAttachmentEndpoint>();
+            .MapEndpoint<AddAttachmentEndpoint>()
+            .MapEndpoint<DownloadAttachmentEndpoint>();
     }
 
     private static IEndpointRouteBuilder MapEndpoint<T>(this IEndpointRouteBuilder app) where T : IEndpoint
