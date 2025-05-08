@@ -1,6 +1,5 @@
 using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
-using Telegram.Bot.Types;
 using Trackit.Domain.Entities;
 
 namespace Trackit.Infra.Persistence;
@@ -13,6 +12,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
     public required DbSet<TextAction> TextActions { get; init; }
     public required DbSet<TimeAction> TimeActions { get; init; }
     public required DbSet<Avatar> Avatars { get; init; }
+    public required DbSet<Attachment> Attachments { get; init; }
     
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {

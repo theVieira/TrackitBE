@@ -18,8 +18,14 @@ public class TicketRepository(AppDbContext context) : ITicket
     {
         var ticket= await _context
             .Tickets
+            .AsSplitQuery()
             .Include(x => x.Client)
             .Include(x => x.CreatedBy)
+            .Include(x => x.Attachments)
+            .Include(x => x.Progress)
+            .Include(x => x.Finish)
+            .Include(x => x.Reopen)
+            .Include(x => x.Notes)
             .FirstOrDefaultAsync(x => x.Id == id);
         return ticket;
     }
@@ -38,9 +44,14 @@ public class TicketRepository(AppDbContext context) : ITicket
     {
         var tickets = 
             await _context.Tickets
-            .AsNoTracking()
+            .AsSplitQuery()
             .Include(x => x.Client)
             .Include(x => x.CreatedBy)
+            .Include(x => x.Attachments)
+            .Include(x => x.Progress)
+            .Include(x => x.Finish)
+            .Include(x => x.Reopen)
+            .Include(x => x.Notes)
             .Where(x => filters.Category.Contains(x.Category))
             .Where(x => filters.Status.Contains(x.Status))
             .Where(x => filters.Priority.Contains(x.Priority))
@@ -53,9 +64,14 @@ public class TicketRepository(AppDbContext context) : ITicket
     public async Task<BaseListResponse<Ticket>> ListAsync(int skip, int take, TicketFilters filters)
     {
         var tickets = await _context.Tickets
-            .AsNoTracking()
+            .AsSplitQuery()
             .Include(x => x.Client)
             .Include(x => x.CreatedBy)
+            .Include(x => x.Attachments)
+            .Include(x => x.Progress)
+            .Include(x => x.Finish)
+            .Include(x => x.Reopen)
+            .Include(x => x.Notes)
             .Where(x => filters.Category.Contains(x.Category))
             .Where(x => filters.Status.Contains(x.Status))
             .Where(x => filters.Priority.Contains(x.Priority))
