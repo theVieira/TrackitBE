@@ -12,6 +12,7 @@ public static class Injections
         builder.AddTechInjection();
         builder.AddTicketInjection();
         builder.AddAvatarInjection();
+        builder.AddAttachmentInjection();
         
         builder.Services.AddSingleton<ITokenManager, TokenManager>();
     }
