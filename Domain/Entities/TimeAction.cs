@@ -9,6 +9,7 @@ public class TimeAction : BaseEntity
     public Guid AuthorId { get; init; }
     [JsonIgnore]
     public Guid TicketId { get; init; }
+    [JsonIgnore]
     public Ticket Ticket { get; init; } = null!;
     public TimeActionType Type { get; init; }
     

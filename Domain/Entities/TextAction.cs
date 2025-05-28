@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
-using Trackit.Utils;
+using Trackit.Application.Services;
 
 namespace Trackit.Domain.Entities;
 
@@ -31,7 +31,7 @@ public class TextAction : BaseEntity
     {
         TicketId = ticketId;
         AuthorId = authorId;
-        Content = SpellCheck.CapitalizeName(content);
+        Content = SpellCheckService.CapitalizeName(content);
         Type = type;
     }
 

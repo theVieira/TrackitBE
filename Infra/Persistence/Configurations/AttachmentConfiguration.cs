@@ -9,20 +9,18 @@ public class AttachmentConfiguration : IEntityTypeConfiguration<Attachment>
     public void Configure(EntityTypeBuilder<Attachment> builder)
     {
         builder.ToTable("Attachments");
+
+        builder.HasKey(x=> x.Id);
+        builder.Property(x=> x.Id).ValueGeneratedNever();
+
+        builder.Property(x => x.Filename).IsRequired();
+        builder.Property(x => x.Size).IsRequired();
+        builder.Property(x => x.Path).IsRequired();
+        builder.Property(x => x.Url).IsRequired();
         
-        builder.HasKey(x => x.Id);
-        builder.Property(x => x.Id).ValueGeneratedNever();
-
         builder
-            .HasOne<Ticket>(x => x.Ticket)
-            .WithMany(x => x.Attachments)
-            .HasForeignKey(x => x.TicketId)
-            .OnDelete(DeleteBehavior.NoAction);
-
-        builder
-            .HasOne<Tech>(x => x.UploadedBy)
-            .WithOne()
-            .HasForeignKey<Attachment>(x => x.UploadedById)
-            .OnDelete(DeleteBehavior.NoAction);
+            .HasDiscriminator<AttachmentType>("Type")
+            .HasValue<ClientAttachment>(AttachmentType.Client)
+            .HasValue<TicketAttachment>(AttachmentType.Ticket);
     }
 }

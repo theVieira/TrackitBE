@@ -18,9 +18,8 @@ public class AvatarConfiguration : IEntityTypeConfiguration<Avatar>
         builder.Property(x => x.Url).IsRequired();
         
         builder
-            .HasOne<Tech>(x => x.Tech)
-            .WithOne(x => x.Avatar)
-            .HasForeignKey<Tech>(x => x.AvatarId)
-            .OnDelete(DeleteBehavior.Cascade);
+            .HasDiscriminator<AvatarType>("Type")
+            .HasValue<ClientAvatar>(AvatarType.Client)
+            .HasValue<TechAvatar>(AvatarType.Tech);
     }
 }

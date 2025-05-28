@@ -1,8 +1,11 @@
 using Trackit.Endpoints;
-using Trackit.Endpoints.Authentication;
 using Trackit.Endpoints.Client;
-using Trackit.Endpoints.Tech;
 using Trackit.Endpoints.Ticket;
+using Trackit.Infra.Endpoints.Authentication;
+using Trackit.Infra.Endpoints.Client;
+using Trackit.Infra.Endpoints.File;
+using Trackit.Infra.Endpoints.Tech;
+using Trackit.Infra.Endpoints.Ticket;
 
 namespace Trackit.Common.Extensions.Endpoints;
 
@@ -30,7 +33,6 @@ public static class Endpoints
             .WithTags("Techs")
             .MapEndpoint<CreateTechEndpoint>()
             .MapEndpoint<GetTechsEndpoint>()
-            .MapEndpoint<GetTechByTokenEndpoint>()
             .MapEndpoint<EditTechAvatarEndpoint>();
 
         endpoints.MapGroup("/tickets")
@@ -40,7 +42,8 @@ public static class Endpoints
             .MapEndpoint<DeleteTicketEndpoint>()
             .MapEndpoint<GetTicketByIdEndpoint>()
             .MapEndpoint<AddAttachmentEndpoint>()
-            .MapEndpoint<DownloadAttachmentEndpoint>();
+            .MapEndpoint<DownloadFileEndpoint>()
+            .MapEndpoint<SetProgressEndpoint>();
     }
 
     private static IEndpointRouteBuilder MapEndpoint<T>(this IEndpointRouteBuilder app) where T : IEndpoint

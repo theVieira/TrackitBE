@@ -19,7 +19,7 @@ public class CreateDefaultUser(AppDbContext context, IConfiguration config)
 
         if (findUser is not null) return;
         
-        var tech = Tech.Factory.Create(user.Name, user.Password, user.Phone, user.Email, user.Role);
+        var tech = Tech.Factory.Create(user.Name, user.Password, user.Phone, user.Email, user.ETechRole);
         
         await _context.Techs.AddAsync(tech);
         await _context.SaveChangesAsync();
@@ -32,5 +32,5 @@ public class UserConfig
     public required string Password { get; init; }
     public required string Email { get; init; }
     public required string Phone { get; init; }
-    public Role Role { get; init; }
+    public eTechRole ETechRole { get; init; }
 }

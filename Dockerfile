@@ -10,7 +10,9 @@ WORKDIR /src
 COPY ["./*.csproj", "./"]
 RUN dotnet restore
 
-COPY . .
+RUN dotnet ef database update
+
+COPY .. .
 RUN dotnet publish -c Release -o /app/publish
 
 FROM base AS final

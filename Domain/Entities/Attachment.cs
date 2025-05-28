@@ -8,13 +8,7 @@ public class Attachment : BaseEntity
     [JsonIgnore]
     [Required]
     public Guid UploadedById { get; init; }
-    public Tech UploadedBy { get; init; } = null!;
-    [JsonIgnore]
-    [Required]
-    public Guid TicketId { get; init; }
-    [JsonIgnore]
-    public Ticket Ticket { get; init; } = null!;
-    [Required]
+    public Tech UploadedBy { get; init; }
     public string Filename { get; init; }
     [Required]
     public long Size { get; init; }
@@ -24,6 +18,8 @@ public class Attachment : BaseEntity
     [Required]
     [Url]
     public string Url { get; init; }    
+    [Required]
+    public AttachmentType Type {  get; init; }
     
     
     // EF
@@ -31,7 +27,6 @@ public class Attachment : BaseEntity
     protected Attachment() { }
 
     protected Attachment(
-        Guid ticketId, 
         Guid uploadedById, 
         string filename,
         long size,
@@ -40,7 +35,6 @@ public class Attachment : BaseEntity
     )
     {
         UploadedById = uploadedById;
-        TicketId = ticketId;
         Filename = filename;
         Size = size;
         Url = url;
@@ -50,7 +44,6 @@ public class Attachment : BaseEntity
     public static class Factory
     {
         public static Attachment Create(
-            Guid ticketId, 
             Guid uploadedById, 
             string filename,
             long size,
@@ -59,7 +52,6 @@ public class Attachment : BaseEntity
         )
         {
             return new Attachment(
-                ticketId,
                 uploadedById,
                 filename,
                 size,
@@ -68,4 +60,10 @@ public class Attachment : BaseEntity
             );
         }
     }
+}
+
+public enum AttachmentType
+{
+    Client,
+    Ticket
 }

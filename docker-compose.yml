@@ -1,11 +1,17 @@
 services:
-  database:
+  trackit-database:
     image: postgres
     container_name: trackit-database
+    networks:
+      - trackit-network
     ports:
       - 5432:5432
     volumes:
-      - ./docker/trackit:/var/lib/postgresql/data:Z
+      - ./Docker/Volumes/trackit-database:/var/lib/postgresql/data:Z
     environment:
       - POSTGRES_USER=root
       - POSTGRES_PASSWORD=root
+          
+networks:
+  trackit-network:
+    driver: bridge

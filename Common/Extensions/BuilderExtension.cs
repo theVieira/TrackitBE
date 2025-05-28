@@ -1,6 +1,7 @@
 using System.Text.Json.Serialization;
+using Microsoft.EntityFrameworkCore;
+using Trackit.Authentication;
 using Trackit.Common.Configurations;
-using Trackit.Common.Injections;
 using Trackit.Infra.Persistence;
 
 namespace Trackit.Common.Extensions;
@@ -12,8 +13,10 @@ public static class BuilderExtension
     builder.AddSwaggerConfiguration();
     builder.Host.AddSerilogConfiguration();
 
-    builder.Services.AddDbContext<AppDbContext>();
-    builder.AddInjections();
+    builder.Services.AddDbContext<AppDbContext>(config =>
+    {
+      config.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));
+    });
     
     builder.Services.AddAuthentication();
     builder.Services.AddAuthorization();

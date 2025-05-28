@@ -14,25 +14,18 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
     public required DbSet<Avatar> Avatars { get; init; }
     public required DbSet<Attachment> Attachments { get; init; }
     
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        var connectionString = Settings.ConnectionString;
-        optionsBuilder.UseNpgsql(connectionString);
-    }
-
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         foreach (var entityType in modelBuilder.Model.GetEntityTypes())
         {
-            if (entityType.BaseType != null) continue; // Aplica apenas às entidades raiz
+            if (entityType.BaseType != null) continue; 
 
-            if (typeof(BaseEntity).IsAssignableFrom(entityType.ClrType))
-            {
-                var parameter = Expression.Parameter(entityType.ClrType, "e");
-                var property = Expression.Property(parameter, "IsDeleted");
-                var filter = Expression.Lambda(Expression.Equal(property, Expression.Constant(false)), parameter);
-                modelBuilder.Entity(entityType.ClrType).HasQueryFilter(filter);
-            }
+            if (!typeof(BaseEntity).IsAssignableFrom(entityType.ClrType)) continue;
+            
+            var parameter = Expression.Parameter(entityType.ClrType, "e");
+            var property = Expression.Property(parameter, "IsDeleted");
+            var filter = Expression.Lambda(Expression.Equal(property, Expression.Constant(false)), parameter);
+            modelBuilder.Entity(entityType.ClrType).HasQueryFilter(filter);
         }
         
         modelBuilder.ApplyConfigurationsFromAssembly(GetType().Assembly);

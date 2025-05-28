@@ -1,4 +1,3 @@
-using System.Drawing;
 using DotNetEnv;
 using Trackit.Common.Extensions;
 using Trackit.Infra.Persistence;

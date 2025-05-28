@@ -13,22 +13,16 @@ public class Avatar : BaseEntity
     [JsonIgnore]
     [Required]
     public string Path { get; private set; }
-    [Required]
-    [JsonIgnore]
-    public Guid TechId { get; init; }
-    [JsonIgnore]
-    public Tech Tech { get; init; }
     
     // EF
     #pragma warning disable
-    private Avatar() { }
+    protected Avatar() { }
     
-    private Avatar(string url, string filename, string path, Guid techId)
+    protected Avatar(string url, string filename, string path)
     {
         Url = url;
         Filename = filename;
         Path = path;
-        TechId = techId;
     }
 
     public static class Factory
@@ -36,13 +30,18 @@ public class Avatar : BaseEntity
         public static Avatar Create(
             string url,
             string filename,
-            string path,
-            Guid techId
+            string path
         )
         {
             return new Avatar(
-                url, filename, path, techId
+                url, filename, path
             );
         }
     }
+}
+
+public enum AvatarType
+{
+    Client,
+    Tech
 }

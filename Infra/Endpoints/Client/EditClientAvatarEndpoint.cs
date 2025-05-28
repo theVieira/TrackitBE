@@ -1,0 +1,62 @@
+using System.ComponentModel.DataAnnotations;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Trackit.Application.Services;
+using Trackit.Authentication;
+using Trackit.Domain.Entities;
+using Trackit.Endpoints;
+using Trackit.Infra.Persistence;
+
+namespace Trackit.Infra.Endpoints.Client;
+
+public class EditClientAvatarEndpoint : IEndpoint
+{
+    public static void Map(IEndpointRouteBuilder app)
+        => app.MapPost("avatar", HandleAsync)
+            .DisableAntiforgery();
+
+    [Consumes("multipart/form-data")]
+    private static async Task<IResult> HandleAsync(
+        [FromForm]AddClientAvatarRequest request,
+        [FromServices]AppDbContext context,
+        FileService fileService,
+        TokenService tokenService,
+        HttpContext httpContext,
+        IConfiguration configuration
+    )
+    {
+        var techId = tokenService.GetClaimValueFromRequest(ClaimTypes.NameIdentifier, httpContext);
+
+        if (!Guid.TryParse(request.ClientId, out var clientId));
+            
+        var client = await  context.Clients.FindAsync(clientId);
+        if (client == null) return Results.NotFound();
+
+        var filename = client.SmallId + "-" + Path.GetFileName(request.File.FileName);
+        var path = "/Avatars/Clients/";
+        var url = configuration["UploadConfig:Url"];
+        
+        var avatar = ClientAvatar.Factory.Create(
+          $"{url}/avatars/{filename}", filename, path, client.Id
+        );
+
+        client.SetAvatar(avatar);
+        context.Clients.Update(client);
+        await context.Avatars.AddAsync(avatar);
+        await context.SaveChangesAsync();
+        
+        await fileService.AttachFile(request.File, "Avatars/Clients");
+        
+        return Results.Ok();
+    }
+}
+
+public class AddClientAvatarRequest
+{
+    [Required] 
+    [FromForm(Name = "file")]
+    public required IFormFile File { get; set; }
+
+    [Required] public required string ClientId { get; set; }
+}
