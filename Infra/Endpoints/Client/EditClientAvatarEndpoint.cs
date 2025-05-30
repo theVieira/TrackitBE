@@ -3,7 +3,6 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Trackit.Application.Services;
-using Trackit.Authentication;
 using Trackit.Domain.Entities;
 using Trackit.Endpoints;
 using Trackit.Infra.Persistence;
@@ -21,14 +20,10 @@ public class EditClientAvatarEndpoint : IEndpoint
         [FromForm]AddClientAvatarRequest request,
         [FromServices]AppDbContext context,
         FileService fileService,
-        TokenService tokenService,
-        HttpContext httpContext,
         IConfiguration configuration
     )
     {
-        var techId = tokenService.GetClaimValueFromRequest(ClaimTypes.NameIdentifier, httpContext);
-
-        if (!Guid.TryParse(request.ClientId, out var clientId));
+        if (!Guid.TryParse(request.ClientId, out var clientId)) return Results.BadRequest();
             
         var client = await  context.Clients.FindAsync(clientId);
         if (client == null) return Results.NotFound();

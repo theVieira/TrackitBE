@@ -19,8 +19,8 @@ public class GetClientByIdEndpoint : IEndpoint
         
         var client = await context.Clients
             .Include(x => x.Avatar)
-            .FirstOrDefaultAsync(x => x.Id == Id);
+            .SingleOrDefaultAsync(x => x.Id == Id);
         
-        return Results.Ok(client);
+        return client is null ? Results.NotFound() : Results.Ok(client);
     }
 }

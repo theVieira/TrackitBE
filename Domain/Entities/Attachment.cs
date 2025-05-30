@@ -5,21 +5,18 @@ namespace Trackit.Domain.Entities;
 
 public class Attachment : BaseEntity
 {
-    [JsonIgnore]
-    [Required]
+    [JsonIgnore] [Required]
     public Guid UploadedById { get; init; }
     public Tech UploadedBy { get; init; }
     public string Filename { get; init; }
     [Required]
     public long Size { get; init; }
-    [JsonIgnore]
-    [Required]
+    [JsonIgnore] [Required]
     public string Path { get; init; }
-    [Required]
-    [Url]
-    public string Url { get; init; }    
-    [Required]
-    public AttachmentType Type {  get; init; }
+    [Required] [Url]
+    public string Url { get; init; }
+
+    [Required] public AttachmentType Type { get; init; } = AttachmentType.Default;
     
     
     // EF
@@ -31,7 +28,8 @@ public class Attachment : BaseEntity
         string filename,
         long size,
         string path,
-        string url
+        string url,
+        AttachmentType type
     )
     {
         UploadedById = uploadedById;
@@ -39,6 +37,7 @@ public class Attachment : BaseEntity
         Size = size;
         Url = url;
         Path = path;
+        Type = type;
     }
 
     public static class Factory
@@ -48,7 +47,8 @@ public class Attachment : BaseEntity
             string filename,
             long size,
             string path,
-            string url
+            string url,
+            AttachmentType type
         )
         {
             return new Attachment(
@@ -56,7 +56,8 @@ public class Attachment : BaseEntity
                 filename,
                 size,
                 path,
-                url
+                url,
+                type
             );
         }
     }
@@ -64,6 +65,7 @@ public class Attachment : BaseEntity
 
 public enum AttachmentType
 {
+    Default,
     Client,
     Ticket
 }

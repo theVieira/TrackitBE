@@ -12,6 +12,8 @@ public class AvatarConfiguration : IEntityTypeConfiguration<Avatar>
         
         builder.HasKey(x => x.Id);
         builder.Property(x => x.Id).ValueGeneratedNever();
+
+        builder.Property<AvatarType>(c => c.Type).HasConversion<string>();
         
         builder.Property(x => x.Filename).IsRequired();
         builder.Property(x => x.Path).IsRequired();
@@ -19,6 +21,7 @@ public class AvatarConfiguration : IEntityTypeConfiguration<Avatar>
         
         builder
             .HasDiscriminator<AvatarType>("Type")
+            .HasValue<Avatar>(AvatarType.Default)
             .HasValue<ClientAvatar>(AvatarType.Client)
             .HasValue<TechAvatar>(AvatarType.Tech);
     }

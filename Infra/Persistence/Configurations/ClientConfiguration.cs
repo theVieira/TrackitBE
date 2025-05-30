@@ -22,6 +22,11 @@ public class ClientConfiguration : IEntityTypeConfiguration<Client>
         builder.HasIndex(x => x.Cnpj).IsUnique();
         builder.HasIndex(x => x.Email).IsUnique();
         builder.HasIndex(x => x.Phone).IsUnique();
+
+        builder
+            .HasOne<ClientAvatar>(x => x.Avatar)
+            .WithOne(x => x.Client)
+            .HasForeignKey<ClientAvatar>(x => x.ClientId);
         
         builder
             .HasMany<Ticket>(x => x.Tickets)

@@ -27,7 +27,9 @@ public static class Endpoints
             .WithTags("Clients")
             .MapEndpoint<CreateClientEndpoint>()
             .MapEndpoint<GetClientsEndpoint>()
-            .MapEndpoint<GetClientByIdEndpoint>();
+            .MapEndpoint<GetClientByIdEndpoint>()
+            .MapEndpoint<EditClientAvatarEndpoint>()
+            .MapEndpoint<GetAllClientsEndpoint>();
 
         endpoints.MapGroup("/techs")
             .WithTags("Techs")

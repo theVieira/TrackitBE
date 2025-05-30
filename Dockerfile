@@ -1,22 +1,19 @@
-FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
-WORKDIR /app
-EXPOSE 8080
+FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 
-RUN mkdir -p /docker/database /Uploads
-
-FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 
-COPY ["./*.csproj", "./"]
+COPY . .
+
 RUN dotnet restore
 
-RUN dotnet ef database update
+RUN dotnet build -c Release -o /app/publish/
 
-COPY .. .
-RUN dotnet publish -c Release -o /app/publish
+FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS final
 
-FROM base AS final
 WORKDIR /app
+
 COPY --from=build /app/publish .
 
-ENTRYPOINT ["dotnet", "Trackit.dll"]
+EXPOSE 8080
+
+CMD ["dotnet", "Trackit.dll"]

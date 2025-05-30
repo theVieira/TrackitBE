@@ -10,13 +10,13 @@ public class ClientAvatar : Avatar
     public Guid ClientId { get; init; }
     [Required]
     [JsonIgnore]
-    public Client Client { get; init; }
+    public Client Client { get; init; } = null!;
     
     // EF
     #pragma warning disable
     private ClientAvatar() : base() {}
 
-    private ClientAvatar(string url, string filename, string path, Guid clientId) : base (url, filename, path)
+    private ClientAvatar(string url, string filename, string path, Guid clientId) : base (url, filename, path, AvatarType.Client)
     {
         ClientId = clientId;
     }

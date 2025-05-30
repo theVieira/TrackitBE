@@ -21,8 +21,8 @@ public class GetClientByNameEndpoint : IEndpoint
             .Clients
             .Where(x => x.Name.ToLower() == nameLower)
             .Include(c  => c.Avatar)
-            .ToListAsync();
+            .SingleOrDefaultAsync();
         
-        return Results.Ok();
+        return client is null ? Results.NotFound() : Results.Ok(client);
     }
 }

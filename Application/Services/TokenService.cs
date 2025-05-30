@@ -4,7 +4,7 @@ using System.Text;
 using Microsoft.IdentityModel.Tokens;
 using Trackit.Domain.Entities;
 
-namespace Trackit.Authentication;
+namespace Trackit.Application.Services;
 
 public class TokenService(IConfiguration configuration)
 {

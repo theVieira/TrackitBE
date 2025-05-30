@@ -29,6 +29,11 @@ public class TechConfiguration : IEntityTypeConfiguration<Tech>
         builder.HasIndex(x => x.Email).IsUnique();
         
         builder
+            .HasOne<TechAvatar>(x => x.Avatar)
+            .WithOne(x  => x.Tech)
+            .HasForeignKey<TechAvatar>(x => x.TechId);
+        
+        builder
             .HasMany<Ticket>(x => x.Tickets)
             .WithOne(x => x.CreatedBy)
             .HasForeignKey(x => x.ClientId)

@@ -18,13 +18,12 @@ public sealed class Client : BaseEntity
     [MinLength(9, ErrorMessage = "Client phone min length 9 characters")]
     [MaxLength(15, ErrorMessage = "Client phone max 15 characters")]
     public string Phone { get; init; }
-    public Guid ClientAvatarId { get; init; }
-    public ClientAvatar Avatar { get; private set; }
+    public ClientAvatar? Avatar { get; private set; }
     public eClientTag? Tag { get; private set; }
     [JsonIgnore]
     public ICollection<Ticket> Tickets { get; init; } = [];
-
-    public ICollection<Attachment> Attachments { get; init; } = [];
+    [JsonIgnore]
+    public ICollection<ClientAttachment> Attachments { get; init; } = [];
 
     // EF
     #pragma warning disable

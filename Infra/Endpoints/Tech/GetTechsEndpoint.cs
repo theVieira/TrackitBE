@@ -16,17 +16,16 @@ public class GetTechsEndpoint : IEndpoint
         [FromServices]AppDbContext context
     )
     {
-        var count =  context.Techs.CountAsync();
+        var count = await context.Techs.CountAsync();
         
-        var techs =  context
+        var techs = await context
             .Techs
+            .OrderBy(c => c.Name)
             .Skip(skip)
             .Take(take)
             .Include(t => t.Avatar)
             .ToListAsync();
         
-        await Task.WhenAll(techs, count);
-        
-        return Results.Ok((total: count, items: techs));
+        return Results.Ok(new { Total = count, Items = techs });
     }
 }

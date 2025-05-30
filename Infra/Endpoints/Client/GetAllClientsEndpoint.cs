@@ -15,6 +15,7 @@ public class GetAllClientsEndpoint : IEndpoint
     )
     {
         var clients = await context.Clients
+            .OrderBy(c => c.Name)
             .ToListAsync();
         
         return Results.Ok(clients);

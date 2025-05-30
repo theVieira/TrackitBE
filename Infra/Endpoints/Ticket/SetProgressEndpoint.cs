@@ -1,6 +1,6 @@
 using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc;
-using Trackit.Authentication;
+using Trackit.Application.Services;
 using Trackit.Domain.Entities;
 using Trackit.Endpoints;
 using Trackit.Infra.Persistence;

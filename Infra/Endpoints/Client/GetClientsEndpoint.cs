@@ -15,17 +15,16 @@ public abstract class GetClientsEndpoint : IEndpoint
         [FromServices]AppDbContext context
     )
     {
-        var clients = context.Clients
+        var clients = await context.Clients
+            .OrderBy(c => c.Name)
             .Skip(skip)
             .Take(take)
             .Include(c => c.Avatar)
             .ToListAsync();
 
-        var total = context.Clients.CountAsync();
+        var total = await context.Clients.CountAsync();
 
-        await Task.WhenAll(clients, total);
          
-        var response = new { Total = total, Items = clients };
-        return Results.Ok(response);
+        return Results.Ok(new { Total = total, Items = clients });
     }
 }

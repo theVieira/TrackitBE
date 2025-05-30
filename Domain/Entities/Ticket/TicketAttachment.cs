@@ -12,7 +12,7 @@ public class TicketAttachment : Attachment
     public Ticket Ticket { get; init; }
     
     // EF
-#pragma warning disable
+    #pragma warning disable
     private TicketAttachment() : base() { }
 
     private TicketAttachment(
@@ -22,7 +22,7 @@ public class TicketAttachment : Attachment
         long size,
         string path,
         string url
-    ) : base(uploadedById, filename, size, path, url)
+    ) : base(uploadedById, filename, size, path, url, AttachmentType.Ticket)
     {
         TicketId = ticketId;
     }

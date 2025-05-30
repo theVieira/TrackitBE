@@ -1,5 +1,5 @@
+using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
-using Microsoft.Build.Framework;
 
 namespace Trackit.Domain.Entities;
  
@@ -12,9 +12,11 @@ public class TechAvatar : Avatar
     [JsonIgnore]
     public Tech Tech { get; init; } = null!;
     
+    // EF
+    #pragma warning disable
     private TechAvatar() : base() {}
 
-    private TechAvatar(string url, string filename, string path, Guid techId) : base(url, filename, path)
+    private TechAvatar(string url, string filename, string path, Guid techId) : base(url, filename, path, AvatarType.Tech)
     {
         TechId = techId;
     }

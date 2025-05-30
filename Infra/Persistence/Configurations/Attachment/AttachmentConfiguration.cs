@@ -18,9 +18,18 @@ public class AttachmentConfiguration : IEntityTypeConfiguration<Attachment>
         builder.Property(x => x.Path).IsRequired();
         builder.Property(x => x.Url).IsRequired();
         
+        builder.Property(x => x.Type).HasConversion<string>().IsRequired();
+        
         builder
             .HasDiscriminator<AttachmentType>("Type")
+            .HasValue<Attachment>(AttachmentType.Default)
             .HasValue<ClientAttachment>(AttachmentType.Client)
             .HasValue<TicketAttachment>(AttachmentType.Ticket);
+
+        builder
+            .HasOne(x => x.UploadedBy)
+            .WithMany()
+            .HasForeignKey(x => x.UploadedById)
+            .IsRequired();
     }
 }

@@ -27,17 +27,15 @@ public class Tech : BaseEntity
     
     [JsonIgnore]
     public ICollection<Ticket> Tickets { get; init; }
-    public Avatar? Avatar { get; private set; }
-    public Guid? AvatarId { get; private set; }
+    public TechAvatar? Avatar { get; private set; }
 
     // EF
     #pragma warning disable
     private Tech() { }
 
-    public void SetAvatar(Avatar avatar)
+    public void SetAvatar(TechAvatar avatar)
     {
         this.Avatar = avatar;
-        this.AvatarId = avatar.Id;
     }
 
     public bool CheckPassword(string password)

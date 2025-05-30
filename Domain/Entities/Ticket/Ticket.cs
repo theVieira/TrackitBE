@@ -30,7 +30,8 @@ public class Ticket : BaseEntity
     public ICollection<Progress> Progress { get; init; } = [];
     public ICollection<Finish> Finish { get; init; } = [];
     public ICollection<Reopen> Reopen { get; init; } = [];
-    public ICollection<Attachment> Attachments { get; init; } = [];
+    [JsonIgnore]
+    public ICollection<TicketAttachment> Attachments { get; init; } = [];
     
     // EF
     #pragma warning disable

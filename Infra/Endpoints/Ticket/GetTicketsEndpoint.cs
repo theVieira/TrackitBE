@@ -41,15 +41,15 @@ public class GetTicketsEndpoint : IEndpoint
            query = query.Where(t => t.Client.Name.ToLower() == client.ToLower());
         }
         
-        var tickets = query
+        var tickets = await query
+            .OrderBy(t => t.CreatedAt)
             .Skip(skip)
             .Take(take)
             .ToListAsync();
         
-        var count = query.CountAsync();
+        var count = await query.CountAsync();
 
-        await Task.WhenAll(tickets, count);
         
-        return Results.Ok((items: tickets, total: count));
+        return Results.Ok(new { Items = tickets, Total = count });
     }
 }

@@ -1,4 +1,5 @@
 using DotNetEnv;
+using Microsoft.EntityFrameworkCore;
 using Trackit.Common.Extensions;
 using Trackit.Infra.Persistence;
 using Trackit.Seed;
@@ -15,6 +16,9 @@ using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
     var context = services.GetRequiredService<AppDbContext>();
+
+    await context.Database.MigrateAsync();
+    
     var config = services.GetRequiredService<IConfiguration>();
     
     var defaultUser = new CreateDefaultUser(context, config);

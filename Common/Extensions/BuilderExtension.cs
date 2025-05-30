@@ -1,6 +1,6 @@
 using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
-using Trackit.Authentication;
+using Trackit.Application.Services;
 using Trackit.Common.Configurations;
 using Trackit.Infra.Persistence;
 
@@ -12,6 +12,9 @@ public static class BuilderExtension
   {
     builder.AddSwaggerConfiguration();
     builder.Host.AddSerilogConfiguration();
+
+    builder.Services.AddScoped<TokenService>();
+    builder.Services.AddScoped<FileService>();
 
     builder.Services.AddDbContext<AppDbContext>(config =>
     {

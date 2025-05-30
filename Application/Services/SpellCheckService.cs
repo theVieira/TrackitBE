@@ -7,9 +7,7 @@ public abstract class SpellCheckService
 {
     public static string CapitalizeName(string name)
     {
-        return name
-            .Trim()
-            .Transform(To.TitleCase);
+        return name.Transform(To.TitleCase);
     }
 
     public static string CapitalizeText(string text)
