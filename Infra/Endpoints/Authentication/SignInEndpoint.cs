@@ -1,11 +1,13 @@
+using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Trackit.Application.Services;
 using Trackit.Endpoints;
 using Trackit.Infra.Persistence;
 
 namespace Trackit.Infra.Endpoints.Authentication;
 
-public class AuthenticationEndpoint : IEndpoint
+public class SignInEndpoint : IEndpoint
 {
     public static void Map(IEndpointRouteBuilder app)
         => app.MapPost("/", HandleAsync);
@@ -16,7 +18,7 @@ public class AuthenticationEndpoint : IEndpoint
         TokenService tokenService
     )
     {
-        var tech = await context.Techs.FindAsync(request.Email);
+        var tech = await context.Techs.SingleOrDefaultAsync(x => x.Email == request.Email);
         
         if(tech == null || !tech.CheckPassword(request.Password))
             return Results.Unauthorized();
@@ -27,4 +29,11 @@ public class AuthenticationEndpoint : IEndpoint
     }
 }
 
-public record AuthenticationRequest(string Email, string Password);
+public record AuthenticationRequest(
+    [Required(ErrorMessage = "Email is required")]
+    [EmailAddress(ErrorMessage = "Email invalid")]
+    string Email,
+    
+    [Required(ErrorMessage = "Password is required")]
+    string Password
+);
