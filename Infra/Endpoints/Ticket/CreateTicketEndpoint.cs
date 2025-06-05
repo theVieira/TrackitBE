@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc;
 using Trackit.Application.Services;
@@ -45,9 +46,18 @@ public class CreateTicketEndpoint : IEndpoint
 }
 
 public record CreateTicketRequest(
+    [Required(ErrorMessage = "ClientId is required")]
     string ClientId,
+    
+    [Required(ErrorMessage = "Description is required")]
     string Description,
+    
+    [Required(ErrorMessage = "Priority is required")]
     eTicketPriority Priority,
+    
+    [Required(ErrorMessage = "Category is required")]
     eTicketCategory Category,
+    
+    [Required(ErrorMessage = "Tag is required")]
     eTicketTag Tag
 );

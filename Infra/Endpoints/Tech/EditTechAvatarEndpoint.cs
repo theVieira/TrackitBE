@@ -49,9 +49,8 @@ public class EditTechAvatarEndpoint : IEndpoint
     }
 }
 
-public class EditTechAvatarRequest
-{
-    [Required]
+public record EditTechAvatarRequest(
+    [Required(ErrorMessage = "File is required")]
     [FromForm(Name = "file")]
-    public required IFormFile File { get; set; }
-}
+    IFormFile File
+);

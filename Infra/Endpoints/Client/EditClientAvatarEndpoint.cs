@@ -47,11 +47,11 @@ public class EditClientAvatarEndpoint : IEndpoint
     }
 }
 
-public class AddClientAvatarRequest
-{
-    [Required] 
-    [FromForm(Name = "file")]
-    public required IFormFile File { get; set; }
+public record AddClientAvatarRequest(
+    [Required(ErrorMessage = "File is required")]
+    [FromForm(Name = "file")] 
+    IFormFile File,
 
-    [Required] public required string ClientId { get; set; }
-}
+    [Required(ErrorMessage = "ClientId is required")] 
+    string ClientId
+);

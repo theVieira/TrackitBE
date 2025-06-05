@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc;
 using Trackit.Infra.Persistence;
 
@@ -26,4 +27,7 @@ public class DeleteTicketEndpoint : IEndpoint
     }
 }
 
-public record DeleteTicketRequest(Guid TicketId);
+public record DeleteTicketRequest(
+    [Required(ErrorMessage = "TicketId is required")]
+    Guid TicketId
+);

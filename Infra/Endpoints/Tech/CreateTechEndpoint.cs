@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc;
 using Trackit.Domain.Entities;
 using Trackit.Endpoints;
@@ -31,9 +32,19 @@ public abstract class CreateTechEndpoint : IEndpoint
 }
 
 public record CreateTechRequest(
+    [Required(ErrorMessage = "Name is required")]
     string Name,
+    
+    [Required(ErrorMessage = "Password is required")]
     string Password,
+    
+    [Required(ErrorMessage = "Phone is required")]
     string Phone,
+    
+    [Required(ErrorMessage = "Email is required")]
+    [EmailAddress(ErrorMessage = "Invalid email address")]
     string Email,
+    
+    [Required(ErrorMessage = "Role is required")]
     eTechRole ETechRole
 );

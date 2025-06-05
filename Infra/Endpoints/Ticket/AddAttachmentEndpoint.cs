@@ -54,10 +54,11 @@ public class AddAttachmentEndpoint : IEndpoint
     }
 }
 
-public class AddAttachmentRequest
-{
-    [Required]
+public record AddAttachmentRequest(
+    [Required(ErrorMessage = "File is required")]
     [FromForm(Name = "file")]
-    public required IFormFile File { get; set; }
-    public required string TicketId { get; set; }
-}
+    IFormFile File,
+    
+    [Required(ErrorMessage = "TicketId is required")]
+    string TicketId 
+);
