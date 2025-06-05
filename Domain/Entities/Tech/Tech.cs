@@ -57,6 +57,8 @@ public class Tech : BaseEntity
         Role = role;
         Tickets = [];
         
+        if(password.Length < 6) throw new ArgumentException("Password must be at least 6 characters");
+        
         var salt = BCrypt.Net.BCrypt.GenerateSalt(8);
         Password = BCrypt.Net.BCrypt.HashPassword(password, salt);
     }
