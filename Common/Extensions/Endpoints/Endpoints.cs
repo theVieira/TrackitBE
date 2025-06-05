@@ -17,7 +17,7 @@ public static class Endpoints
 
         endpoints.MapGroup("/sign-in")
             .WithTags("Authentication")
-            .MapEndpoint<AuthenticationEndpoint>();
+            .MapEndpoint<SignInEndpoint>();
         
         endpoints.MapGroup("/")
             .WithTags("Health Check")
