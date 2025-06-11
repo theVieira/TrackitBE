@@ -17,12 +17,26 @@ public class GetTicketsEndpoint : IEndpoint
         [FromQuery]eTicketStatus[] status,
         [FromQuery]eTicketCategory[] category,
         [FromQuery]eTicketPriority[] priority,
+        [FromQuery]DateTime? startDate,
+        [FromQuery]DateTime? endDate,
         [FromQuery]string? client,
         [FromServices]AppDbContext context
     )
     {
+        if (startDate >= endDate) return Results.BadRequest("Start date must be before end date");
+        
         var query = context.Tickets.AsQueryable();
 
+        if (startDate.HasValue)
+        {
+          query = query.Where(t => t.CreatedAt >= startDate.Value);  
+        }
+
+        if (endDate.HasValue)
+        {
+            query = query.Where(t => t.CreatedAt <= endDate.Value);
+        }
+        
         query = query
             .Where(t => status.Contains(t.Status))
             .Where(t => priority.Contains(t.Priority))
