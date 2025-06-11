@@ -29,6 +29,7 @@ public class GetTicketsEndpoint : IEndpoint
             .Where(t => category.Contains(t.Category));
         
         query = query
+            .Include(t => t.Client)
             .Include(t => t.Progress)
             .Include(t => t.Reopen)
             .Include(t => t.Finish)
