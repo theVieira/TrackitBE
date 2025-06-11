@@ -44,6 +44,7 @@ public class GetTicketsEndpoint : IEndpoint
         
         query = query
             .Include(t => t.Client)
+            .Include(t => t.CreatedBy)
             .Include(t => t.Progress)
             .Include(t => t.Reopen)
             .Include(t => t.Finish)
