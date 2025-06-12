@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Trackit.Endpoints;
 using Trackit.Infra.Persistence;
 
@@ -17,7 +18,18 @@ public class GetTicketByIdEndpoint : IEndpoint
         if (!Guid.TryParse(id, out Guid ticketId))
             return Results.NotFound();
 
-        var ticket = await context.Tickets.FindAsync(ticketId);
+        var ticket = await context.Tickets
+            .Include(t => t.Notes)
+            .Include(t => t.Feedbacks)
+            .Include(t => t.Attachments)
+            .Include(t => t.Finish)
+            .Include(t => t.Progress)
+            .Include(t => t.Reopen)
+            .Include(t => t.CreatedBy)
+                .ThenInclude(t => t.Avatar)
+            .Include(t => t.Client)
+                .ThenInclude(c => c.Avatar)
+            .FirstOrDefaultAsync(t => t.Id == ticketId);
         
         return Results.Ok(ticket);
     }
