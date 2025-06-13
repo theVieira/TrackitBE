@@ -39,6 +39,7 @@ public static class Endpoints
 
         endpoints.MapGroup("/tickets")
             .WithTags("Tickets")
+            .MapEndpoint<GetTicketTimelineEndpoint>()
             .MapEndpoint<GetTicketsEndpoint>()
             .MapEndpoint<CreateTicketEndpoint>()
             .MapEndpoint<DeleteTicketEndpoint>()

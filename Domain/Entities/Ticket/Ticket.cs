@@ -57,7 +57,7 @@ public class Ticket : BaseEntity
 
     public void FinalizeTicket(Finish finish)
     {
-        if (Status is not eTicketStatus.Progress && Status is not eTicketStatus.Cancelled)
+        if (Status is not eTicketStatus.Progress)
             throw new Exception("Ticket status must be progress to update the status for finish");
 
         Status = eTicketStatus.Finish;
@@ -66,20 +66,12 @@ public class Ticket : BaseEntity
     
     public void ToMeetTicket()
     {
-        if(Status is not eTicketStatus.Open && Status is not eTicketStatus.Cancelled)
+        if(Status is not eTicketStatus.Open)
             throw new Exception("Ticket status must be open to update the status for progress");
         
         Status = eTicketStatus.Progress;
     }
-
-    public void CancelTicket()
-    {
-        if (Status is eTicketStatus.Finish)
-            throw new Exception("Not possible cancel finished ticket");
-        
-        Status = eTicketStatus.Cancelled;
-    }
-
+    
     public void ChangeCategory(eTicketCategory category)
     {
         if (Category == category)

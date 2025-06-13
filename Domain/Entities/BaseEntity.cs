@@ -7,7 +7,7 @@ public abstract class BaseEntity
 {
     public Guid Id { get; init; }
     public string SmallId { get; init; }
-    public DateTime CreatedAt { get; init; }
+    public DateTime CreatedAt { get; protected init; }
     [JsonIgnore] public Boolean IsDeleted { get; private set; }
     [JsonIgnore] public DateTime? DeletedAt { get; private set; }
 

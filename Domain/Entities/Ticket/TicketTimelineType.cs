@@ -3,9 +3,10 @@ using System.Text.Json.Serialization;
 namespace Trackit.Domain.Entities;
 
 [JsonConverter(typeof(JsonStringEnumConverter))]
-public enum eTicketStatus
+public enum eTicketTimelineType
 {
-    Open,
+    Create,
     Progress,
     Finish,
+    Reopen,
 }
