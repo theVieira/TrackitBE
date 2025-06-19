@@ -22,9 +22,7 @@ public class GetTicketTimelineEndpoint : IEndpoint
             .Include(t => t.Progress).ThenInclude(timeAction => timeAction.Author)
             .Include(t => t.Reopen).ThenInclude(timeAction => timeAction.Author)
             .Include(t => t.Finish).ThenInclude(timeAction => timeAction.Author)
-            .Include(t => t.Attachments)
-            .Include(t => t.Feedbacks)
-            .Include(t => t.Notes)
+            .Include(t => t.Feedbacks).ThenInclude(textAction => textAction.Author)
             .FirstOrDefaultAsync(t => t.Id == Id);
         
         if(ticket is null) return  Results.NotFound();
@@ -49,16 +47,27 @@ public class GetTicketTimelineEndpoint : IEndpoint
                 )
             )
         );
-        
-        timeline.AddRange(ticket.Finish.Select(
-                p => TicketTimeline.Factory.Create(
-                    p.CreatedAt,
-                    eTicketTimelineType.Finish,
-                    p.Author,
-                    ""
+
+        var finishTimeline = await Task.WhenAll(
+                ticket.Finish.Select(async p =>
+                        {
+                            var feedback = await context.TextActions.FirstOrDefaultAsync(
+                                t => t.Type == TextActionType.Feedback &&
+                                t.Author.Id == p.Author.Id &&
+                                t.TicketId == p.TicketId
+                            );
+                    
+                            return TicketTimeline.Factory.Create(
+                                p.CreatedAt,
+                                eTicketTimelineType.Finish,
+                                p.Author,
+                                feedback?.Content
+                            );
+                        }
                 )
-            )
         );
+        
+        timeline.AddRange(finishTimeline);
         
         timeline.AddRange(ticket.Reopen.Select(
                 p => TicketTimeline.Factory.Create(

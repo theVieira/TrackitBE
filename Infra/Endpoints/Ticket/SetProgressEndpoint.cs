@@ -10,7 +10,7 @@ namespace Trackit.Infra.Endpoints.Ticket;
 public class SetProgressEndpoint : IEndpoint
 {
     public static void Map(IEndpointRouteBuilder app)
-        => app.MapPut("progress/{id}", HandleAsync);
+        => app.MapPut("{id}/progress", HandleAsync);
 
     private static async Task<IResult> HandleAsync(
         string id,
