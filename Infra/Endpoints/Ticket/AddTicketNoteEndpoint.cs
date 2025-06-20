@@ -39,7 +39,7 @@ public class AddTicketNoteEndpoint : IEndpoint
         await context.TextActions.AddAsync(note);
         await context.SaveChangesAsync();
         
-        return Results.Created("", note);
+        return Results.Ok(note);
     }
 }
 
