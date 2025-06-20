@@ -7,6 +7,7 @@ namespace Trackit.Domain.Entities;
 public class TextAction : BaseEntity
 {
     public Tech Author { get; init; } = null!;
+    [JsonIgnore]
     public Guid AuthorId { get; init; }
     
     [MinLength(10, ErrorMessage = "Ticket note min length is 10")]
@@ -16,6 +17,7 @@ public class TextAction : BaseEntity
     public TextActionType Type { get; init; }
     [JsonIgnore]
     public Guid TicketId { get; init; }
+    [JsonIgnore]
     public Ticket Ticket { get; init; } = null!;
     
     // EF
