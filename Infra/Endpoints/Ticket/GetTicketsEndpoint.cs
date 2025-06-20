@@ -41,16 +41,10 @@ public class GetTicketsEndpoint : IEndpoint
             .Where(t => status.Contains(t.Status))
             .Where(t => priority.Contains(t.Priority))
             .Where(t => category.Contains(t.Category));
-        
+
         query = query
             .Include(t => t.Client)
-            .Include(t => t.CreatedBy)
-            .Include(t => t.Progress)
-            .Include(t => t.Reopen)
-            .Include(t => t.Finish)
-            .Include(t => t.Attachments)
-            .Include(t => t.Feedbacks)
-            .Include(t => t.Notes);
+            .Include(t => t.CreatedBy);
         
         if (!string.IsNullOrEmpty(client))
         {
