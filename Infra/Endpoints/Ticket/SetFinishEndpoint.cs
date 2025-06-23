@@ -36,11 +36,11 @@ public class SetFinishEndpoint : IEndpoint
             request.Feedback
         );
         
-        await context.TextActions.AddAsync(feedback);
-
         var finish = TimeAction.Factory.CreateFinish(tech.Id, ticket.Id);
         ticket.FinalizeTicket((finish as Finish)!);
         
+        await context.TimeActions.AddAsync(finish);
+        await context.TextActions.AddAsync(feedback);
         await context.SaveChangesAsync();
         
         return Results.Ok();

@@ -49,22 +49,22 @@ public class GetTicketTimelineEndpoint : IEndpoint
         );
 
         var finishTimeline = await Task.WhenAll(
-                ticket.Finish.Select(async p =>
-                        {
-                            var feedback = await context.TextActions.FirstOrDefaultAsync(
-                                t => t.Type == TextActionType.Feedback &&
-                                t.Author.Id == p.Author.Id &&
-                                t.TicketId == p.TicketId
-                            );
-                    
-                            return TicketTimeline.Factory.Create(
-                                p.CreatedAt,
-                                eTicketTimelineType.Finish,
-                                p.Author,
-                                feedback?.Content
-                            );
-                        }
-                )
+            ticket.Finish.Select(async p =>
+            {
+                var feedback = await context.TextActions
+                    .Where(t =>
+                        t.Type == TextActionType.Feedback && t.TicketId == p.TicketId
+                    )
+                    .OrderByDescending(t => t.CreatedAt)
+                    .FirstOrDefaultAsync();
+
+                return TicketTimeline.Factory.Create(
+                    p.CreatedAt,
+                    eTicketTimelineType.Finish,
+                    p.Author,
+                    feedback?.Content
+                );
+            })
         );
         
         timeline.AddRange(finishTimeline);

@@ -61,7 +61,6 @@ public class Ticket : BaseEntity
             throw new Exception("Ticket status must be progress to update the status for finish");
 
         Status = eTicketStatus.Finish;
-        Finish.Add(finish);
     }
     
     public void ToMeetTicket()
