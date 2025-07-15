@@ -6,14 +6,13 @@ public class FileService
     
     public async Task AttachFile(
         IFormFile file,
-        string path
+        string path,
+        string fileName
     )
     {
         var directory = Path.Combine(Directory.GetCurrentDirectory(), "Uploads", path);
         if(!Directory.Exists(directory)) Directory.CreateDirectory(directory);
         
-        var fileName = Path.GetFileName(file.FileName);
-
         var extension = Path.GetExtension(fileName).ToLowerInvariant();
         
         if(!_allowedExtensions.Contains(extension)) throw new NotSupportedException("mimetype not supported");

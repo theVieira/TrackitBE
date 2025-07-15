@@ -16,7 +16,7 @@ public static class BuilderExtension
     builder.Services.AddScoped<TokenService>();
     builder.Services.AddScoped<FileService>();
 
-    builder.Services.AddDbContext<AppDbContext>(config =>
+    builder.Services.AddDbContextFactory<AppDbContext>(config =>
     {
       config.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));
     });

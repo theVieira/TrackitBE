@@ -33,7 +33,7 @@ public class EditClientAvatarEndpoint : IEndpoint
         var url = configuration["UploadConfig:Url"];
         
         var avatar = ClientAvatar.Factory.Create(
-          $"{url}/avatars/{filename}", filename, path, client.Id
+          $"{url}/uploads/avatars/Clients/{filename}", filename, path, client.Id
         );
 
         client.SetAvatar(avatar);
@@ -41,7 +41,7 @@ public class EditClientAvatarEndpoint : IEndpoint
         await context.Avatars.AddAsync(avatar);
         await context.SaveChangesAsync();
         
-        await fileService.AttachFile(request.File, "Avatars/Clients");
+        await fileService.AttachFile(request.File, "Avatars/Clients", filename);
         
         return Results.Ok();
     }

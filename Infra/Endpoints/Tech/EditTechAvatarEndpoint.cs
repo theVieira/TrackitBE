@@ -36,14 +36,14 @@ public class EditTechAvatarEndpoint : IEndpoint
 
         var filename = tech.SmallId + "-" + Path.GetFileName(request.File.FileName);
         
-        var avatar = TechAvatar.Factory.Create($"{url}/avatars/{filename}", filename, path, tech.Id);
+        var avatar = TechAvatar.Factory.Create($"{url}/uploads/avatars/Techs/{filename}", filename, path, tech.Id);
 
         await context.Avatars.AddAsync(avatar);
         tech.SetAvatar(avatar);
         context.Techs.Update(tech);
         await  context.SaveChangesAsync();
 
-        await fileService.AttachFile(request.File, path);
+        await fileService.AttachFile(request.File, path, filename);
 
         return Results.Ok();
     }

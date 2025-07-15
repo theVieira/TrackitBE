@@ -80,6 +80,14 @@ public class Ticket : BaseEntity
         Category = category;
     }
 
+    public void ReopenTicket()
+    {
+        if (Status is not eTicketStatus.Finish)
+            throw new Exception("Ticket status must be finish to reopen");
+        
+        Status =  eTicketStatus.Open;
+    }
+
     public void AddAttachment(TicketAttachment attachment)
     {
         this.Attachments.Add(attachment);

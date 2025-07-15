@@ -48,7 +48,8 @@ public static class Endpoints
             .MapEndpoint<DownloadFileEndpoint>()
             .MapEndpoint<SetProgressEndpoint>()
             .MapEndpoint<AddTicketNoteEndpoint>()
-            .MapEndpoint<SetFinishEndpoint>();
+            .MapEndpoint<SetFinishEndpoint>()
+            .MapEndpoint<ReopenTicketEndpoint>();
     }
 
     private static IEndpointRouteBuilder MapEndpoint<T>(this IEndpointRouteBuilder app) where T : IEndpoint

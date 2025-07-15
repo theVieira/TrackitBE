@@ -12,7 +12,8 @@ public class GetTicketTimelineEndpoint : IEndpoint
 
     private static async Task<IResult> HandleAsync(
         string id,
-        AppDbContext context
+        AppDbContext context,
+        IDbContextFactory<AppDbContext> contextFactory
     )
     {
         if(!Guid.TryParse(id, out var Id)) return Results.BadRequest();
@@ -51,10 +52,10 @@ public class GetTicketTimelineEndpoint : IEndpoint
         var finishTimeline = await Task.WhenAll(
             ticket.Finish.Select(async p =>
             {
-                var feedback = await context.TextActions
-                    .Where(t =>
-                        t.Type == TextActionType.Feedback && t.TicketId == p.TicketId
-                    )
+                await using var scopedContext = contextFactory.CreateDbContext();
+
+                var feedback = await scopedContext.TextActions
+                    .Where(t => t.Type == TextActionType.Feedback && t.TicketId == p.TicketId)
                     .OrderByDescending(t => t.CreatedAt)
                     .FirstOrDefaultAsync();
 

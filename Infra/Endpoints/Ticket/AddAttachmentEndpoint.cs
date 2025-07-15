@@ -40,7 +40,7 @@ public class AddAttachmentEndpoint : IEndpoint
         var url = configuration["UploadConfig:Url"];
         
         var attachment = TicketAttachment.Factory.Create(
-            tech.Id, ticket.Id, filename, request.File.Length, path, $"{url}/attachments/{filename}"
+            tech.Id, ticket.Id, filename, request.File.Length, path, $"{url}/uploads/attachments/Tickets/{filename}"
         );
         
         ticket.AddAttachment(attachment);
@@ -48,9 +48,9 @@ public class AddAttachmentEndpoint : IEndpoint
         await context.Attachments.AddAsync(attachment);
         await context.SaveChangesAsync();
         
-        await fileService.AttachFile(request.File, path);
+        await fileService.AttachFile(request.File, path, filename);
         
-        return Results.Ok();
+        return Results.Ok(attachment);
     }
 }
 
